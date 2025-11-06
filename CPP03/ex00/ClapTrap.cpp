@@ -43,18 +43,33 @@ ClapTrap& ClapTrap::operator=(const ClapTrap&copy)
 //	------	//
 
 //	---	Member Functions --- //
+
+static bool isClapTrapActive(const int &health, const int &energy,
+					const std::string &name, const std::string &activity)
+{
+	if(health == 0) 
+	{
+		std::cout << "ClapTrap " << name << "can't " << activity 
+				<< ". He's dead!" << std::endl;
+		return (false);
+	}
+	else if (energy == 0) 
+	{
+		std::cout << "ClapTrap " << name << " can't " << activity
+				<< " due to lack of energy!" << std::endl;
+		return (false);
+	}
+	return (true);
+}
+
 void ClapTrap::attack(const std::string& target)
 {
-	if(this->_energy == 0) 
-	{
-		std::cout << "ClapTrap " << this->_name << "can't attack due to lack of energy!"
-				<< std::endl;
+	if (!isClapTrapActive(this->_health, this->_energy, this->_name, "attack"))
 		return ;
-	}
+	this->_energy--;
 	std::cout << "ClapTrap " << this->_name << " attacks " << target << ", causing "
 			<< this->_attackDamage << " points of damage!\n";
 	std::cout << "Current energy: " << this->_energy << std::endl;
-	this->_energy--;
 }
 
 void ClapTrap::takeDamage(unsigned int amount)
@@ -62,23 +77,19 @@ void ClapTrap::takeDamage(unsigned int amount)
 	this->_health -= amount; 
 	if (this->_health < -1)
 		this->_health = 0;
-	std::cout << "ClapTrap " << this->_name << " took " << amount << "amount of damage!\n";
+	std::cout << "ClapTrap " << this->_name << " took " << amount << " points of damage!\n";
 	std::cout << "Current health: " << this->_health << std::endl;
 }
 
 void ClapTrap::beRepaired(unsigned int amount)
 {
-	if (this->_energy == 0)
-	{
-		std::cout << "ClapTrap " << this->_name << "can't repair due to lack of energy!"
-				<< std::endl;
+	if (!isClapTrapActive(this->_health, this->_energy, this->_name, "repair"))
 		return ;
-	}
 	this->_health += amount;
 	if (this->_health > 10)
 		this->_health = 10;
 	this->_energy--;
-	std::cout << "ClapTrap " << this->_name << " repaired " << amount << "amount of health!\n";
+	std::cout << "ClapTrap " << this->_name << " repaired " << amount << " points of health!\n";
 	std::cout << "Current health: " << this->_health << "\n";
 	std::cout << "Current energy: " << this->_energy << std::endl;
 }
