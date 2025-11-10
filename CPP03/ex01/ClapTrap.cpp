@@ -9,16 +9,19 @@ ClapTrap::ClapTrap()
 	std::cout << "ClapTrap default constructor called (no name inserted)." << std::endl;
 }
 
-ClapTrap::ClapTrap(std::string name)
+ClapTrap::ClapTrap(const std::string name)
 	: _name(name), _health(10), _energy(10), _attackDamage(0)
 {
 	std::cout << "ClapTrap \"" << name << "\" was created." << std::endl;
 }
 
 ClapTrap::ClapTrap(const ClapTrap &copy)
+	: _name(copy._name),
+	_health(copy._health),
+	_energy(copy._energy),
+	_attackDamage(copy._attackDamage)
 {
 	std::cout << "ClapTrap \"" << copy._name << "\" was cloned." << std::endl;
-	*this = copy;
 }
 
 ClapTrap::~ClapTrap()
@@ -44,30 +47,12 @@ ClapTrap& ClapTrap::operator=(const ClapTrap&copy)
 
 //	---	Member Functions --- //
 
-static bool isClapTrapActive(const int &health, const int &energy,
-					const std::string &name, const std::string &activity)
-{
-	if(health == 0) 
-	{
-		std::cout << "ClapTrap " << name << "can't " << activity 
-				<< ". He's dead!" << std::endl;
-		return (false);
-	}
-	else if (energy == 0) 
-	{
-		std::cout << "ClapTrap " << name << " can't " << activity
-				<< " due to lack of energy!" << std::endl;
-		return (false);
-	}
-	return (true);
-}
-
 void ClapTrap::attack(const std::string& target)
 {
-	if (!isClapTrapActive(this->_health, this->_energy, this->_name, "attack"))
+	if (!canPerformAction("attack"))
 		return ;
 	this->_energy--;
-	std::cout << "ClapTrap " << this->_name << " attacks " << target << ", causing "
+	std::cout << "ClapTrap \"" << this->_name << "\" attacks " << target << ", causing "
 			<< this->_attackDamage << " points of damage!\n";
 	std::cout << "Current energy: " << this->_energy << std::endl;
 }
@@ -75,26 +60,44 @@ void ClapTrap::attack(const std::string& target)
 void ClapTrap::takeDamage(unsigned int amount)
 {
 	this->_health -= amount; 
-	if (this->_health < -1)
+	if (this->_health < 0)
 		this->_health = 0;
-	std::cout << "ClapTrap " << this->_name << " took " << amount << " points of damage!\n";
+	std::cout << "ClapTrap \"" << this->_name << "\" took " << amount << " points of damage!\n";
 	std::cout << "Current health: " << this->_health << std::endl;
 }
 
 void ClapTrap::beRepaired(unsigned int amount)
 {
-	if (!isClapTrapActive(this->_health, this->_energy, this->_name, "repair"))
+	if (!canPerformAction("repair"))
 		return ;
 	this->_health += amount;
-	if (this->_health > 10)
-		this->_health = 10;
 	this->_energy--;
-	std::cout << "ClapTrap " << this->_name << " repaired " << amount << " points of health!\n";
+	std::cout << "ClapTrap \"" << this->_name << "\" repaired " << amount << " points of health!\n";
 	std::cout << "Current health: " << this->_health << "\n";
 	std::cout << "Current energy: " << this->_energy << std::endl;
 }
 //	------  //
 
-/*	--- Private ---  */
+/*	--- Protected ---  */
 
-//	EMPTY
+bool ClapTrap::canPerformAction(const std::string &action)
+{
+	if(this->_health == 0) 
+	{
+		std::cout << this->getTrapType() << " \"" << this->_name << " \" can't "
+				<< action << ". He's dead!" << std::endl;
+		return (false);
+	}
+	else if (this->_energy == 0) 
+	{
+		std::cout << this->getTrapType() << " \"" << this->_name << "\" can't "
+				<< action << " due to lack of energy!" << std::endl;
+		return (false);
+	}
+	return (true);
+}
+
+std::string ClapTrap::getTrapType() const
+{
+	return ("ClapTrap");
+}
