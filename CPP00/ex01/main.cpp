@@ -43,9 +43,9 @@ int	main(void)
 	{
 		print_options();
 		if (!ft_getline(std::cin, input))	
-			return (1);
+			return (0);
 		if (!apply_options(yellowpages, input))
-			return (1);
+			return (0);
 	}
 	return (0);
 }

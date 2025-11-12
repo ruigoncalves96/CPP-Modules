@@ -37,7 +37,7 @@ void PhoneBook::print_yellowbook(void)
 	std::cout << " | ";
 	std::cout << std::setw(10) << std::right << "Nickname" << std::endl;
 
-	for (int i = 0; i < PhoneBook::_nbr_of_contacts; i++)
+	for (int i = 0; i < this->_nbr_of_contacts; i++)
 	{
 		std::cout << std::setw(10) << std::right << this->_contacts[i].index + 1 << " | ";
 		std::cout << std::setw(10) << std::right << trunc_string(this->_contacts[i].get_first_name()) << " | ";

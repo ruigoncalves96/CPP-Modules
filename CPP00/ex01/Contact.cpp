@@ -58,17 +58,17 @@ void Contact::print_contact_info(void)
 
 // ----- //
 
-std::string Contact::get_first_name(void)
+const std::string& Contact::get_first_name(void) const
 {
 	return (this->_first_name);
 }
 
-std::string Contact::get_last_name(void)
+const std::string& Contact::get_last_name(void) const
 {
 	return (this->_last_name);
 }
 
-std::string Contact::get_nickname(void)
+const std::string& Contact::get_nickname(void) const
 {
 	return (this->_nickname);
 }

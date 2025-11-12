@@ -9,13 +9,13 @@ class Contact
 		Contact() : index(0) {};
 		~Contact(){};
 	
-		int				index;
+		int					index;
 
-		bool 			get_contact_info();
-		void			print_contact_info();
-		std::string		get_first_name();
-		std::string		get_last_name();
-		std::string		get_nickname();
+		bool 				get_contact_info();
+		void				print_contact_info();
+		const std::string&	get_first_name() const;
+		const std::string&	get_last_name() const;
+		const std::string&	get_nickname() const;
 
 	private:
 		std::string		_first_name;
