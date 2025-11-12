@@ -7,8 +7,9 @@ Zombie* zombieHorde(int N, std::string name);
 int	main(void)
 {
 	Zombie *zombie = zombieHorde(HORDE_SIZE, "Alfredo");
-	if (!zombie)
-		return (1);
+
+	for (int i = 0; i < HORDE_SIZE; i++)
+		zombie[i].announce();
 	delete[] zombie;
 	return (0);
 }
