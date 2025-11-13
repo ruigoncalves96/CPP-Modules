@@ -8,7 +8,8 @@ int	main(int argc, char *argv[])
 		return (1);
 	}
 
-	Sed sed(argv[1]);
-	sed.sedReplace(argv[2], argv[3]);
-	return 0;	
+	if (Sed::replace(argv[1], argv[2], argv[3]))
+		return (1);
+
+	return (0);	
 }

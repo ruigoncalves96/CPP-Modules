@@ -1,21 +1,5 @@
 # include "Sed.hpp"
 
-Sed::Sed(const std::string &file)
-{
-	this->_fileOriginal = file;
-	std::string::size_type find = file.find("/");
-	if (find != std::string::npos)
-		this->_fileReplace = file.substr(find + 1);
-	else
-		this->_fileReplace = file;
-	find = this->_fileReplace.find_last_of(".");
-	if (find != std::string::npos)
-		this->_fileReplace.erase(find);
-	this->_fileReplace += ".replace";
-}
-
-//	------	//
-
 static bool isDirectory(const std::string &path)
 {
 	struct stat pathStat;
@@ -26,39 +10,68 @@ static bool isDirectory(const std::string &path)
 	return (S_ISDIR(pathStat.st_mode));
 }
 
-static bool	openFiles(std::ifstream &fileOriginal, std::ofstream &fileReplace,
-					const std::string &_fileOriginal, const std::string &_fileReplace)
+static std::string createOutputFile(const std::string &inputPath)
 {
-	fileOriginal.open(_fileOriginal.c_str());
-	if (!fileOriginal.is_open() || isDirectory(_fileOriginal))
+	std::string baseStr = inputPath;
+	std::string::size_type find = baseStr.find("/");
+	if (find != std::string::npos)
+		baseStr = inputPath.substr(find + 1);
+
+	find = baseStr.find_last_of(".");
+	if (find != std::string::npos)
+		baseStr.erase(find);
+	baseStr += ".replace";
+
+	return (baseStr);
+}
+
+static bool	openFiles(std::ifstream &in, std::ofstream &out,
+					const std::string &_inputPath, const std::string &_outputFile)
+{
+	if (isDirectory(_inputPath))
 	{
-		std::cerr << "Error opening file - '" << _fileOriginal << "'.\n";
+		std::cerr << "Error: '" << _inputPath << "' is a directory.\n";
 		return (false);
 	}
-	fileReplace.open(_fileReplace.c_str());
-	if (!fileReplace.is_open())
+	in.open(_inputPath.c_str());
+	if (!in.is_open())
 	{
-		std::cerr << "Error creating file - '" << _fileReplace << "'.\n";
-		fileOriginal.close();
+		std::cerr << "Error opening file - '" << _inputPath << "'.\n";
+		return (false);
+	}
+	out.open(_outputFile.c_str());
+	if (!out.is_open())
+	{
+		std::cerr << "Error creating file - '" << _outputFile << "'.\n";
+		in.close();
 		return (false);
 	}
 	return (true);
 }
 
-bool Sed::sedReplace(const std::string replaceStr, const std::string newStr)
+bool Sed::replace(const std::string &inputPath, const std::string &replaceStr, const std::string &newStr)
 {
 	if (replaceStr.empty() || newStr.empty())
 	{
 		std::cerr << "Empty string to sedReplace\n";
 		return (false);
 	}
-	std::ifstream fileOriginal;
-	std::ofstream fileReplace;
-	if (!openFiles(fileOriginal, fileReplace, this->_fileOriginal, this->_fileReplace))
+
+	const std::string outputFile = createOutputFile(inputPath);
+	std::ifstream in;
+	std::ofstream out;
+	if (!openFiles(in, out, inputPath, outputFile))
 		return (false);
+
 	std::string newLine;
+	if (replaceStr == newStr)
+	{
+		while (std::getline(in, newLine))
+			out << newLine << '\n';
+		return (true);
+	}
 	std::string::size_type replaceStr_size = replaceStr.length();
-	while (std::getline(fileOriginal, newLine))
+	while (std::getline(in, newLine))
 	{
 		std::string::size_type strPosition = 0;
 		while ((strPosition = newLine.find(replaceStr, strPosition)) != std::string::npos)
@@ -67,7 +80,7 @@ bool Sed::sedReplace(const std::string replaceStr, const std::string newStr)
 			newLine.insert(strPosition, newStr);
 			strPosition += replaceStr_size;
 		}
-		fileReplace << newLine << std::endl;
+		out << newLine << '\n';
 	}
 	return (true);
 }

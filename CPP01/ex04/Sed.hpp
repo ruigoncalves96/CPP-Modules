@@ -9,14 +9,14 @@
 class Sed
 {
 	public:
-		Sed(const std::string &file);
-		~Sed(){};
-
-		bool sedReplace(const std::string replaceStr, const std::string newStr);
+		static bool replace(const std::string &inputPath,
+							const std::string &replaceStr,
+							const std::string &newStr);
 
 	private:
-		std::string _fileOriginal;
-		std::string _fileReplace;
+		Sed(){};
+		Sed(const Sed &){};
+		~Sed(){};
 };
 
 #endif
