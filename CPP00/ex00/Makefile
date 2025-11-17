@@ -14,9 +14,8 @@ WHITE   = \033[1;37m
 #       FLAGS              #
 # ======================== #
 
-# CXX = g++-14
 CXX = clang++
-CXXFLAGS = -Wall -Wextra -Werror -std=c++98 #-pedantic -pedantic-errors
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
 NAME = megaphone
 
