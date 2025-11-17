@@ -1,15 +1,24 @@
 # include "Contact.hpp"
+# include <cctype>
+
+static bool isPrint(std::string &input)
+{
+	for (int i = 0; input[i]; i++)
+		if (!std::isprint(input[i]))
+			return (false);
+	return (true);
+}
 
 static bool parse_info_input(std::string &input)
 {
-	if (input.empty() || input.find_first_of("\t") != std::string::npos)
+	if (input.empty() || !isPrint(input) || input.find_first_of("\t") != std::string::npos)
 		return (false);
 	return (true);
 }
 
 static bool parse_phone_number(std::string &input)
 {
-	if (input.empty() || input.find_last_not_of("+0123456789") != std::string::npos)
+	if (input.empty() || !isPrint(input) || input.find_last_not_of("+0123456789") != std::string::npos)
 		return (false);
 	return (true);
 }
