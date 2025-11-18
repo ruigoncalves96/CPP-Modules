@@ -1,33 +1,40 @@
 # include "Harl.hpp"
 
+const std::string Harl::_levels[4] = {"DEBUG", "INFO", "WARNING", "ERROR"};
+
 //	Public member funcitons
 
-Harl::Harl(void)
+Harl::Harl()
 {
-	this->_levels[0] = "DEBUG";
-	this->_levels[1] = "INFO";
-	this->_levels[2] = "WARNING";
-	this->_levels[3] = "ERROR";
+	_comments[0] = &Harl::debug;
+	_comments[1] = &Harl::info;
+	_comments[2] = &Harl::warning;
+	_comments[3] = &Harl::error;
 }
 
-void Harl::complain(std::string level)
+void Harl::filterHarl(const std::string &level)
 {
-	void (Harl::*comments[4])(void) = {
-		&Harl::debug,
-		&Harl::info,
-		&Harl::warning,
-		&Harl::error
-	};
-	for (int i = 0; i < 4; i++)
-	{
-		if (level == this->_levels[i])
-		{
-			(this->*comments[i])();
-			return ;
-		}
+	int levelCase = this->getLevel(level);
+	switch (levelCase) {
+		case 1: // DEBUG
+			this->debug();
+			/* fall through */
+		case 2: // INFO
+			this->info();
+			/* fall through */
+		case 3: // WARNING
+			this->warning();
+			/* fall through */
+		case 4: // ERROR
+			this->error();
+			break ; 
+		default:
+			std::cout << "\n[ Probably complaining about insignificant problems ]\n";
 	}
-	std::cout << "\n[ Probably complaining about insignificant problems ]\n";
+	std::cout << std::endl;
 }
+
+//	Private member functions 
 
 int Harl::getLevel(const std::string &level)
 {
@@ -38,8 +45,6 @@ int Harl::getLevel(const std::string &level)
 	}
 	return (0);
 }
-
-//	Private member functions 
 
 void Harl::debug(void)
 {

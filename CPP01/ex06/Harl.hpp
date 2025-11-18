@@ -9,11 +9,13 @@ class Harl
 		Harl();
 		~Harl(){};
 
-		void complain(std::string level);
-		int getLevel(const std::string &level);
+		void filterHarl(const std::string &level);
 
 	private:
-		std::string _levels[4];
+		static const std::string _levels[4];
+		void (Harl::*_comments[4])(void);
+
+		int	getLevel(const std::string &level);
 
 		void debug(void);
 		void info(void);
