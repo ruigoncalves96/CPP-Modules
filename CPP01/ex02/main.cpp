@@ -14,6 +14,6 @@ int	main(void)
 	std::cout << "Values:\n";
 	std::cout << "- string value -> " << string << "\n";
 	std::cout << "- string pointer value -> " << *stringPTR << "\n";
-	std::cout << "- string reference value -> " << string << "\n";
+	std::cout << "- string reference value -> " << stringREF << "\n";
 	
 }
