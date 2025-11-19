@@ -12,7 +12,7 @@ int	main(void)
 	std::cout << std::endl;
 	annoyingHarl.complain("ERROR");
 	std::cout << std::endl;
-	annoyingHarl.complain("Es lindo");
+	annoyingHarl.complain("Es lindo Harl!");
 	std::cout << std::endl;
 
 	return (0);
