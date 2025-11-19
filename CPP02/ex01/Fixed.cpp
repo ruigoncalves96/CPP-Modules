@@ -8,16 +8,16 @@ Fixed::Fixed() : _rawBits(0)
 	std::cout << "Default constructor called\n";
 }
 
-Fixed::Fixed(const int value) : _rawBits(0)
+Fixed::Fixed(const int value)
+	: _rawBits(value << this->_fractionalBits)
 {
 	std::cout << "Int constructor called\n";
-	this->_rawBits = value << this->_fractionalBits;	
 }
 
-Fixed::Fixed(const float value) : _rawBits(0)
+Fixed::Fixed(const float value)
+	: _rawBits(static_cast<int>(roundf(value * (1 << this->_fractionalBits))))
 {
 	std::cout << "Float constructor called\n";
-	this->_rawBits = (int)roundf(value * (1 << this->_fractionalBits));
 }
 
 // Copy Constructor
@@ -61,5 +61,5 @@ int Fixed::toInt(void) const
 
 float Fixed::toFloat(void) const
 {
-	return ((float)this->getRawBits() / (1 << _fractionalBits));
+	return (static_cast<float>(this->getRawBits()) / (1 << _fractionalBits));
 }
