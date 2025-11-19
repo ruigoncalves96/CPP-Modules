@@ -37,10 +37,10 @@ class Fixed
 		Fixed operator--(int);
 
 		//	Overloaded Static Member Functions
-		static Fixed& min(Fixed &a, Fixed &b);
-		static const Fixed& min(const Fixed &a, const Fixed &b);
-		static Fixed& max(Fixed &a, Fixed &b);
-		static const Fixed& max(const Fixed &a, const Fixed &b);
+		static 			Fixed& min(Fixed &a, Fixed &b);
+		static const	Fixed& min(const Fixed &a, const Fixed &b);
+		static 			Fixed& max(Fixed &a, Fixed &b);
+		static const 	Fixed& max(const Fixed &a, const Fixed &b);
 
 		int 	getRawBits(void) const;
 		void	setRawBits(int const raw);
