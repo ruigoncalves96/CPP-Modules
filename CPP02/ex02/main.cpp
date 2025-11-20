@@ -26,6 +26,9 @@ int main(void)
 
 	std::cout << "\nComparison Operators\n";
 	std::cout << "-----\n";
+	std::cout << "a = " << a << "\n";
+	std::cout << "b = " << b << "\n";
+	std::cout << "-----\n";
 	std::cout << "a > b = " << (a > b) << "\n";
 	std::cout << "b > c = " << (b > c) << "\n";
 	std::cout << "-----\n";
@@ -34,9 +37,11 @@ int main(void)
 	std::cout << "-----\n";
 	std::cout << "a >= b = " << (a >= b) << "\n";
 	std::cout << "b >= a = " << (b >= a) << "\n";
+	std::cout << "a >= a = " << (a >= a) << "\n";
 	std::cout << "-----\n";
 	std::cout << "a <= b = " << (a <= b) << "\n";
 	std::cout << "b <= a = " << (b <= a) << "\n";
+	std::cout << "a <= a = " << (a <= a) << "\n";
 	std::cout << "-----\n";
 	std::cout << "a == b = " << (a == b) << "\n";
 	std::cout << "a == a = " << (a == a) << "\n";
