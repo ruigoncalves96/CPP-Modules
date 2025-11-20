@@ -93,14 +93,14 @@ Fixed Fixed::operator-(const Fixed &obj) const
 Fixed Fixed::operator*(const Fixed &obj) const
 {
     Fixed result;
-    result.setRawBits((static_cast<long long>(this->_rawBits) * obj._rawBits) >> _fractionalBits);
+    result.setRawBits((static_cast<long>(this->_rawBits) * obj._rawBits) >> _fractionalBits);
     return (result);
 }
 
 Fixed Fixed::operator/(const Fixed &obj) const
 {
     Fixed result;
-    result.setRawBits((static_cast<long long>(this->_rawBits) << _fractionalBits) / obj._rawBits);
+    result.setRawBits((static_cast<long>(this->_rawBits) << _fractionalBits) / obj._rawBits);
     return (result);
 }
 //	-------  //
