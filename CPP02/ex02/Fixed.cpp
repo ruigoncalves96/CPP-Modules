@@ -78,22 +78,30 @@ bool Fixed::operator!=(const Fixed &obj) const
 //	--- Arithmetic Operators ---  //
 Fixed Fixed::operator+(const Fixed &obj) const
 {
-	return (this->toFloat() + obj.toFloat());
+    Fixed result;
+    result.setRawBits(this->_rawBits + obj._rawBits);
+    return (result);
 }
 
 Fixed Fixed::operator-(const Fixed &obj) const
 {
-	return (this->toFloat() - obj.toFloat());
+    Fixed result;
+    result.setRawBits(this->_rawBits - obj._rawBits);
+    return (result);
 }
 
 Fixed Fixed::operator*(const Fixed &obj) const
 {
-	return (this->toFloat() * obj.toFloat());
+    Fixed result;
+    result.setRawBits((static_cast<long long>(this->_rawBits) * obj._rawBits) >> _fractionalBits);
+    return (result);
 }
 
 Fixed Fixed::operator/(const Fixed &obj) const
 {
-	return (this->toFloat() / obj.toFloat());
+    Fixed result;
+    result.setRawBits((static_cast<long long>(this->_rawBits) << _fractionalBits) / obj._rawBits);
+    return (result);
 }
 //	-------  //
 
@@ -167,4 +175,10 @@ int Fixed::toInt(void) const
 float Fixed::toFloat(void) const
 {
 	return (static_cast<float>(this->getRawBits()) / (1 << _fractionalBits));
+}
+
+std::ostream& operator<<(std::ostream &os, const Fixed &obj)
+{
+	os << obj.toFloat();
+	return (os);
 }
