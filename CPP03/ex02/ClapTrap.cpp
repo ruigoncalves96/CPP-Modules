@@ -9,7 +9,7 @@ ClapTrap::ClapTrap()
 	std::cout << "ClapTrap default constructor called (no name inserted)." << std::endl;
 }
 
-ClapTrap::ClapTrap(const std::string name)
+ClapTrap::ClapTrap(const std::string &name)
 	: _name(name), _health(10), _energy(10), _attackDamage(0)
 {
 	std::cout << "ClapTrap \"" << name << "\" was created." << std::endl;
@@ -59,7 +59,7 @@ void ClapTrap::attack(const std::string& target)
 
 void ClapTrap::takeDamage(unsigned int amount)
 {
-	this->_health -= amount; 
+	this->_health -= static_cast<int>(amount); 
 	if (this->_health < 0)
 		this->_health = 0;
 	std::cout << "ClapTrap \"" << this->_name << "\" took " << amount << " points of damage!\n";
@@ -70,7 +70,7 @@ void ClapTrap::beRepaired(unsigned int amount)
 {
 	if (!canPerformAction("repair"))
 		return ;
-	this->_health += amount;
+	this->_health += static_cast<int>(amount);
 	this->_energy--;
 	std::cout << "ClapTrap \"" << this->_name << "\" repaired " << amount << " points of health!\n";
 	std::cout << "Current health: " << this->_health << "\n";
