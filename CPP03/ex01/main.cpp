@@ -6,12 +6,12 @@ int main(void)
 	std::cout << "=== ClapTrap and ScavTrap Test ===" << std::endl;
 
     // --- Base ClapTrap objects ---
-    ClapTrap clap1("Clappy");
-    ClapTrap clap2("Trappy");
+    ClapTrap clap1("Antonio");
+    ClapTrap clap2("Alfredo");
 
     std::cout << "\n--- ClapTrap Attacks ---" << std::endl;
-    clap1.attack("Trappy");
-    clap2.attack("Clappy");
+    clap1.attack("Alfredo");
+    clap2.attack("Antonio");
 
     std::cout << "\n--- Taking Damage ---" << std::endl;
     clap1.takeDamage(5);
@@ -23,12 +23,12 @@ int main(void)
 
     // --- Derived ScavTrap objects ---
     std::cout << "\n=== ScavTrap Test ===" << std::endl;
-    ScavTrap scav1("Scavvy");
-    ScavTrap scav2("Guardy");
+    ScavTrap scav1("Joca");
+    ScavTrap scav2("Xico");
 
     std::cout << "\n--- ScavTrap Attacks (Overridden) ---" << std::endl;
-    scav1.attack("Guardy");
-    scav2.attack("Scavvy");
+    scav1.attack("Xico");
+    scav2.attack("Joca");
 
     std::cout << "\n--- ScavTrap Special Ability ---" << std::endl;
     scav1.guardGate();
@@ -45,7 +45,7 @@ int main(void)
     // --- Energy Exhaustion Test ---
     std::cout << "\n--- Energy Exhaustion Test ---" << std::endl;
     for (int i = 0; i < 50; ++i)
-        scav1.attack("Guardy");
+        scav1.attack("Xico");
 
     // --- Copy and Assignment Tests ---
     std::cout << "\n--- Copy Constructor Test ---" << std::endl;
