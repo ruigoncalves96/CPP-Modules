@@ -8,10 +8,10 @@
 // If result < 0 → v is on the other side of u
 // If result = 0 → v is exactly on the line (edge)
 //
-static Fixed cross(const Point& a, const Point& b, const Point& c)
+static Fixed cross(const Point& a, const Point& b, const Point& point)
 {
-    return (b.getXpoint() - a.getXpoint()) * (c.getYpoint() - a.getYpoint())
-         - (b.getYpoint() - a.getYpoint()) * (c.getXpoint() - a.getXpoint());
+    return (b.getXpoint() - a.getXpoint()) * (point.getYpoint() - a.getYpoint())
+         - (b.getYpoint() - a.getYpoint()) * (point.getXpoint() - a.getXpoint());
 }
 
 bool bsp(const Point a, const Point b, const Point c, const Point p)
