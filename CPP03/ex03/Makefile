@@ -14,9 +14,8 @@ WHITE   = \033[1;37m
 #       FLAGS              #
 # ======================== #
 
-CXX = g++-14
-# CXX = clang++
-CXXFLAGS = -Wall -Wextra -Werror -Wshadow -std=c++98 -pedantic -pedantic-errors
+CXX = c++
+CXXFLAGS = -Wall -Wextra -Werror -Wshadow -std=c++98
 RM = rm -f
 
 NAME = DiamondTrap
