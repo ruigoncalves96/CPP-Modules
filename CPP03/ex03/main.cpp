@@ -11,7 +11,7 @@ static void separator(const std::string& title) {
 int main() 
 {
     separator("Basic ClapTrap");
-    ClapTrap c1("CLAPPY");
+    ClapTrap c1("BOGAS");
     c1.attack("target");
     c1.beRepaired(3);
     for (int i = 0; i < 12; ++i) 
@@ -19,7 +19,7 @@ int main()
     c1.beRepaired(1);
 
     separator("ScavTrap test");
-    ScavTrap s1("SCAVVY");
+    ScavTrap s1("ANTONIO");
     s1.attack("enemy");
     s1.guardGate();
     for (int i = 0; i < 55; ++i) 
@@ -27,14 +27,14 @@ int main()
     s1.guardGate(); // after energy drained
 
     separator("FragTrap test");
-    FragTrap f1("FRAGGY");
+    FragTrap f1("XICO");
     f1.attack("evil bot");
     f1.highFivesGuys();
     for (int i = 0; i < 5; ++i) 
         f1.beRepaired(2);
 
     separator("DiamondTrap construction");
-    DiamondTrap d1("DIAMY");
+    DiamondTrap d1("JOCA");
     d1.whoAmI();
     d1.printStatus();
     d1.attack("boss");

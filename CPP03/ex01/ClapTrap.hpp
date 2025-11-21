@@ -18,10 +18,10 @@ class ClapTrap
 		void beRepaired(unsigned int amount);
 
 	protected:
-		std::string	_name;
-		int			_health;
-		int			_energy;
-		int			_attackDamage;
+		std::string		_name;
+		unsigned int	_health;
+		unsigned int	_energy;
+		unsigned int	_attackDamage;
 	
 		bool canPerformAction(const std::string &action);
 		virtual std::string getTrapType() const;

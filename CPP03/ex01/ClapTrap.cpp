@@ -59,9 +59,15 @@ void ClapTrap::attack(const std::string& target)
 
 void ClapTrap::takeDamage(unsigned int amount)
 {
-	this->_health -= static_cast<int>(amount); 
-	if (this->_health < 0)
+	if (this->_health == 0)
+	{
+		std::cout << "ClapTrap " << this->_name << " is already dead, cant take more damage!\n";
+		return ;
+	}
+	if (amount > this->_health)
 		this->_health = 0;
+	else
+		this->_health -= amount; 
 	std::cout << "ClapTrap \"" << this->_name << "\" took " << amount << " points of damage!\n";
 	std::cout << "Current health: " << this->_health << std::endl;
 }
@@ -70,7 +76,7 @@ void ClapTrap::beRepaired(unsigned int amount)
 {
 	if (!canPerformAction("repair"))
 		return ;
-	this->_health += static_cast<int>(amount);
+	this->_health += amount;
 	this->_energy--;
 	std::cout << "ClapTrap \"" << this->_name << "\" repaired " << amount << " points of health!\n";
 	std::cout << "Current health: " << this->_health << "\n";
