@@ -4,17 +4,17 @@ int main(void)
 {
 	std::cout << "=== ClapTrap Battle Arena ===" << std::endl;
 
-	std::string nameA = "Clappy";
-	std::string nameB = "Trappy";
+	std::string nameA = "Joca";
+	std::string nameB = "Xico";
 
 	ClapTrap a(nameA);
 	ClapTrap b(nameB);
 	ClapTrap c(a); // copy constructor
 
 	std::cout << "\n--- Initial State ---" << std::endl;
-	a.attack("Trappy");
-	b.attack("Clappy");
-	c.attack("Clappy");
+	a.attack("Xico");
+	b.attack("Joca");
+	c.attack("Joca");
 
 	std::cout << "\n--- Taking Damage ---" << std::endl;
 	a.takeDamage(5);
@@ -28,7 +28,7 @@ int main(void)
 
 	std::cout << "\n--- Energy Exhaustion Test ---" << std::endl;
 	for (int i = 0; i < 12; i++)
-		a.attack("Trappy"); // should stop after energy runs out
+		a.attack("Xico"); // should stop after energy runs out
 
 	std::cout << "\n--- Assignment Operator Test ---" << std::endl;
 	b = a;
