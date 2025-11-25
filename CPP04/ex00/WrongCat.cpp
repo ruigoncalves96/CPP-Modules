@@ -28,6 +28,6 @@ WrongCat& WrongCat::operator=(const WrongCat &copy)
 
 void WrongCat::makeSound(void) const
 {
-	std::cout << "* ZZZZZ *" << std::endl;
+	std::cout << "* MEEEW *" << std::endl;
 }
 
