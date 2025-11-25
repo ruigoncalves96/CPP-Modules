@@ -86,9 +86,7 @@ void Character::use(int idx, ICharacter& target)
 	}
 	if (this->inventory[idx])
 	{
-		std::cout << "\'" << this->_name << "\'" << " used " << "\'"
-				<< this->inventory[idx]->getType() << "\'"
-				<< " on " << target.getName() << std::endl;
+		std::cout << "\'" << this->_name << "\' uses a spell!" << std::endl;
 		this->inventory[idx]->use(target);
 		return ;
 	}

@@ -21,6 +21,9 @@ int main(void)
         
         hero->use(0, *enemy);
         hero->use(1, *enemy);
+
+        hero->use(-2, *enemy);
+        hero->use(4, *enemy);
         
         delete enemy;
         delete hero;
