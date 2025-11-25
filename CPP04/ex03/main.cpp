@@ -43,6 +43,7 @@ int main(void)
         mage->equip(spell_5);
 
 		mage->printSlots();
+
 		delete spell_5;
         delete mage;
     }
@@ -66,6 +67,8 @@ int main(void)
         
         player->use(0, *player); // Should do nothing (empty slot)
         
+        delete spell_1;
+        delete spell_2;
         delete player;
     }
 
