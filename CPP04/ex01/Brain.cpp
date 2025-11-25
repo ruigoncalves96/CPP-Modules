@@ -44,7 +44,6 @@ const std::string Brain::getIdea(int idx) const
 	std::cout << "Idea Accessed" << std::endl;
 }
 
-
 //	--- Private ---  //
 void Brain::_copyBrain(const Brain &src)
 {

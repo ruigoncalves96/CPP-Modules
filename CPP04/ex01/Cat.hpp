@@ -14,8 +14,8 @@ class Cat : public Animal
 		Cat& operator=(const Cat &copy);
 
 		void makeSound(void) const;
-		Brain& getBrain(void);
-		const Brain& getBrain(void) const;
+		void setIdea(int idx, const std::string &idea);
+		const std::string getIdea(int idx) const;
 
 	private :
 		Brain *_brain;
