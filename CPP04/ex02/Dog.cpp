@@ -35,12 +35,15 @@ void Dog::makeSound(void) const
 	std::cout << "* WOOOF *" << std::endl;
 }
 
-Brain& Dog::getBrain(void)
+void Dog::setIdea(int idx, const std::string &idea)
 {
-	return (*this->_brain);
+	std::cout << "Dog will add an idea - ";
+	return (_brain->setIdea(idx, idea));
 }
 
-const Brain& Dog::getBrain(void) const
+const std::string Dog::getIdea(int idx) const
 {
-	return (*this->_brain);
+	return (_brain->getIdea(idx));
 }
+
+

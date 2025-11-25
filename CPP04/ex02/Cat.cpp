@@ -35,12 +35,14 @@ void Cat::makeSound(void) const
 	std::cout << "* meeeew *" << std::endl;
 }
 
-Brain& Cat::getBrain(void)
+void Cat::setIdea(int idx, const std::string &idea)
 {
-	return (*this->_brain);
+	std::cout << "Cat will add an idea - ";
+	return (_brain->setIdea(idx, idea));
 }
 
-const Brain& Cat::getBrain(void) const
+const std::string Cat::getIdea(int idx) const
 {
-	return (*this->_brain);
+	return (_brain->getIdea(idx));
 }
+
