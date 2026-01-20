@@ -32,7 +32,7 @@ void ScalarConverter::convert(std::string str)
 	switch (type)
 	{
 		case INVALID:
-			std::cout << "INVALID" << std::endl;
+			std::cerr << "Error: Invalid input" << std::endl;
 			break ;
 		case CHAR:
 			convert_char(str);
