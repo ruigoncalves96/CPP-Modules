@@ -40,12 +40,12 @@ void Span::addNumber(int value)
 	this->_cont.insert(value);
 }
 
-int randomNumber () { return (std::rand() % 100); }
-
-void Span::addRandomNumbers(void)
+void Span::addRandomNumbers(unsigned int countToAdd)
 {
-	std::srand(unsigned(std::time(0)));
-	for (unsigned int i = 0; i < this->_size; i++)
+	if (this->_cont.size() + countToAdd > this->_size)
+		throw(std::out_of_range("Not enough space in Span"));
+
+	for (unsigned int i = 0; i < countToAdd; i++)
 		this->_cont.insert(randomNumber());
 }
 
@@ -83,5 +83,19 @@ void Span::printSpan(void) const
 	while (it != _cont.end())
 		std::cout << *it++ << " ";
 	std::cout << std::endl;
+}
+
+//	|| --- Private --- ||
+
+//	Helper function
+int Span::randomNumber()
+{
+	static bool seeded = false;
+	if (!seeded)
+	{
+		std::srand(std::time(NULL));
+		seeded = true;
+	}
+	return (std::rand() % RANDOM_RANGE);
 }
 

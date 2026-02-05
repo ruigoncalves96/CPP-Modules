@@ -4,6 +4,8 @@
 # include <iostream>
 # include <set>
 
+# define RANDOM_RANGE 10000
+
 class Span
 {
 	public:
@@ -17,7 +19,7 @@ class Span
 		std::multiset<int> cont(void) const;
 
 		void addNumber(int);
-		void addRandomNumbers(void);
+		void addRandomNumbers(unsigned int);
 		unsigned long shortestSpan(void) const;
 		unsigned long longestSpan(void) const;
 
@@ -25,6 +27,8 @@ class Span
 
 	private:
 		Span(void);
+
+		int randomNumber(void);
 
 		std::multiset<int> _cont;
 		unsigned int _size;
