@@ -5,20 +5,59 @@
 
 int main(void)
 {
-	Bureaucrat SubDirector("Sub-Director", 145); 
-	std::cout << SubDirector << "\n";
-	Bureaucrat Director("Director", 137); 
-	std::cout << Director << "\n\n";
+	{
+		std::cout << "|| --- Shrubbery --- ||" << "\n";
+		Bureaucrat Gardener("Gardener", 145); 
+		std::cout << Gardener << "\n";
+		Bureaucrat ChiefGradener("ChiefGradener", 137); 
+		std::cout << ChiefGradener << "\n\n";
 
-	ShrubberyCreationForm PardonForm("Citizens");	
-	std::cout << PardonForm << std::endl;
+		ShrubberyCreationForm treePlanting("Home");	
+		std::cout << treePlanting << std::endl;
 
-	// Sign Form
-	SubDirector.signForm(PardonForm);
-	std::cout << PardonForm << std::endl;
-	// Execute Form
-	SubDirector.executeForm(PardonForm);
-	Director.executeForm(PardonForm);
+		// Sign Form
+		Gardener.signForm(treePlanting);
+		std::cout << treePlanting << std::endl;
+		// Execute Form
+		Gardener.executeForm(treePlanting);
+		ChiefGradener.executeForm(treePlanting);
+	}
+
+	{
+		std::cout << "\n|| --- Robotomy --- ||" << "\n";
+		Bureaucrat mechanic("Mechanic", 72); 
+		std::cout << mechanic << "\n";
+		Bureaucrat engineer("Engineer", 45); 
+		std::cout << engineer << "\n\n";
+
+		RobotomyRequestForm robotomy("Human");	
+		std::cout << robotomy << std::endl;
+
+		// Sign Form
+		mechanic.signForm(robotomy);
+		std::cout << robotomy << std::endl;
+		// Execute Form
+		mechanic.executeForm(robotomy);
+		engineer.executeForm(robotomy);
+	}
+
+	{
+		std::cout << "\n|| --- Presidential Pardon --- ||" << "\n";
+		Bureaucrat vicePresident("Vice-President", 25); 
+		std::cout << vicePresident << "\n";
+		Bureaucrat president("President", 5); 
+		std::cout << president << "\n\n";
+
+		PresidentialPardonForm pardon("Thief");	
+		std::cout << pardon << std::endl;
+
+		// Sign Form
+		vicePresident.signForm(pardon);
+		std::cout << pardon << std::endl;
+		// Execute Form
+		vicePresident.executeForm(pardon);
+		president.executeForm(pardon);
+	}
 
 	return (0);
 }

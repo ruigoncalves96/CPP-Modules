@@ -26,10 +26,20 @@ int main(void)
 		director.signForm(surveyForm);
 		std::cout << surveyForm << '\n';
 	}
-	catch (const std::exception &e)
-	{
-		std::cerr << e.what() << std::endl;
-	}
+	catch (const std::exception &e) { std::cerr << e.what() << std::endl; }
 
+	try
+	{
+		std::cout << "\t|| Build Error Forms ||\n";
+		Form surveyForm("Survey", 151, 151);
+	}
+	catch(const std::exception& e) { std::cerr << e.what() << '\n'; }
+
+	try
+	{
+		Form surveyForm("Survey", 0, 0);
+	}
+	catch(const std::exception& e) { std::cerr << e.what() << '\n'; }
+	
 	return (0);
 }
