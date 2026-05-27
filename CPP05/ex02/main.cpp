@@ -5,6 +5,7 @@
 
 int main(void)
 {
+	try
 	{
 		std::cout << "|| --- Shrubbery --- ||" << "\n";
 		Bureaucrat Gardener("Gardener", 145); 
@@ -22,7 +23,9 @@ int main(void)
 		Gardener.executeForm(treePlanting);
 		ChiefGradener.executeForm(treePlanting);
 	}
+	catch (const std::exception &e) { std::cerr << e.what() << std::endl; }
 
+	try
 	{
 		std::cout << "\n|| --- Robotomy --- ||" << "\n";
 		Bureaucrat mechanic("Mechanic", 72); 
@@ -40,7 +43,9 @@ int main(void)
 		mechanic.executeForm(robotomy);
 		engineer.executeForm(robotomy);
 	}
+	catch (const std::exception &e) { std::cerr << e.what() << std::endl; }
 
+	try
 	{
 		std::cout << "\n|| --- Presidential Pardon --- ||" << "\n";
 		Bureaucrat vicePresident("Vice-President", 25); 
@@ -58,6 +63,7 @@ int main(void)
 		vicePresident.executeForm(pardon);
 		president.executeForm(pardon);
 	}
+	catch (const std::exception &e) { std::cerr << e.what() << std::endl; }
 
 	return (0);
 }
