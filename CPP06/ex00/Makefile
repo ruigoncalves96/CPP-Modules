@@ -32,7 +32,7 @@ OBJ_DIR = obj
 #        SRC/OBJ           #
 # ======================== #
 
-SRC_FILES = main.cpp ScalarConverter.cpp ScalarConverter_convert.cpp ScalarConverter_parsing.cpp
+SRC_FILES = main.cpp ScalarConverter.cpp TypeUtils.cpp
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.cpp=.o))
 

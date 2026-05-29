@@ -22,12 +22,13 @@ Base* generate(void)
 {
 	int random = random_int() % 3;
 	Base *new_class = NULL;
-	if (random == 0)
-		new_class = new A;
-	else if (random == 1)
-		new_class = new B;
-	else if (random == 2)
-		new_class = new C;
+	switch (random)
+	{
+		case 0: new_class = new A; break;
+		case 1: new_class = new B; break;
+		case 2: new_class = new C; break;
+		default : break;
+	}
 	return (new_class);
 }
 
@@ -53,19 +54,19 @@ void identify(Base& p)
 		std::cout << "Generated Class A&" << std::endl;
 		return ;
 	}
-	catch (std::bad_cast &) {}
+	catch (std::exception &e) {std::cout << "Error: " << e.what() << " <to A&>" <<std::endl;}
 	try {
 		(void)dynamic_cast<B&>(p);
 		std::cout << "Generated Class B&" << std::endl;
 		return ;
 	}
-	catch (std::bad_cast &) {}
+	catch (std::exception &e) {std::cout << "Error: " << e.what() << " <to B&>" << std::endl;}
 	try {
 		(void)dynamic_cast<C&>(p);
 		std::cout << "Generated Class C&" << std::endl;
 		return ;
 	}
-	catch (std::bad_cast &) {}
+	catch (std::exception &e) {std::cout << "Error: " << e.what() << " <to C&>" << std::endl;}
 }
 
 int main(void)

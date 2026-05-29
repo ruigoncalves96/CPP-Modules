@@ -2,17 +2,6 @@
 # define SCALARCONVERTER_HPP
 
 # include <iostream>
-# include <string>
-
-typedef enum e_type_flag
-{
-	INVALID,
-	CHAR,
-	INT,
-	FLOAT,
-	DOUBLE,
-	PSEUDO
-} 			t_type_flag;
 
 class ScalarConverter
 {
@@ -26,12 +15,5 @@ class ScalarConverter
 
 		ScalarConverter& operator=(const ScalarConverter&);
 };
-
-// Helper function declarations
-t_type_flag parse_type(std::string &str);
-void convert_char(std::string &str);
-void convert_int(std::string &str);
-void convert_float_double(std::string &str);
-void convert_pseudo(std::string &str);
 
 #endif
