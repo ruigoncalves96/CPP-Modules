@@ -16,11 +16,11 @@ class Array
 		T &operator[](unsigned int idx);
 		const T &operator[](unsigned int idx) const;
 
-		unsigned int len(void) const;
+		unsigned int size(void) const;
 
 	private:
 		T *_array;
-		unsigned int _array_len;
+		unsigned int _array_size;
 };
 
 # include "Array.tpp"

@@ -3,10 +3,10 @@
 
 int main(void)
 {
-	std::cout << "|| Default constructor && access len 0 ||\n\n";
+	std::cout << "|| Default constructor && access size 0 ||\n\n";
 	{
 		Array<int> i_array;
-		std::cout << "Array len = " << i_array.len() << "\n";
+		std::cout << "Array size = " << i_array.size() << "\n";
 		try {
 			std::cout << "array[0] = " << i_array[0] << "\n";
 		}
@@ -21,7 +21,7 @@ int main(void)
 		i_array[2] = 2;
 		i_array[3] = 3;
 		i_array[4] = 4;
-		for (size_t i = 0; i < i_array.len(); i++)
+		for (size_t i = 0; i < i_array.size(); i++)
 			std::cout << "array[" << i << "] = " << i_array[i] << " \n";
 		std::cout << "\n";
 		try {
@@ -40,15 +40,15 @@ int main(void)
 		i_array[2] = 2;
 		i_array[3] = 3;
 		i_array[4] = 4;
-		std::cout << "Array len = " << i_array.len() << "\n";
-		for (size_t i = 0; i < i_array.len(); i++)
+		std::cout << "Array size = " << i_array.size() << "\n";
+		for (size_t i = 0; i < i_array.size(); i++)
 			std::cout << "array[" << i << "] = " << i_array[i] << " \n";
 		std::cout << "\n";
 		
 		//	Copy constructor
 		Array<int> i_copy_array(i_array);
-		std::cout << "Copy array len = " << i_copy_array.len() << "\n";
-		for (size_t i = 0; i < i_copy_array.len(); i++)
+		std::cout << "Copy array size = " << i_copy_array.size() << "\n";
+		for (size_t i = 0; i < i_copy_array.size(); i++)
 			std::cout << "copy_array[" << i << "] = " << i_copy_array[i] << " \n";
 		std::cout << "\n";
 
@@ -57,20 +57,20 @@ int main(void)
 		std::cout << "Changed -> array[0] = 42\n\n";
 
 		//	Print main array
-		for (size_t i = 0; i < i_array.len(); i++)
+		for (size_t i = 0; i < i_array.size(); i++)
 			std::cout << "array[" << i << "] = " << i_array[i] << " \n";
 		std::cout << "\n";
 
 		//	Print copy array
-		std::cout << "Copy array len = " << i_copy_array.len() << "\n";
-		for (size_t i = 0; i < i_copy_array.len(); i++)
+		std::cout << "Copy array size = " << i_copy_array.size() << "\n";
+		for (size_t i = 0; i < i_copy_array.size(); i++)
 			std::cout << "copy_array[" << i << "] = " << i_copy_array[i] << " \n";
 		std::cout << "\n";
 
 		//	Copy assignment 
 		i_copy_array = i_array;
-		std::cout << "Copy array len = " << i_copy_array.len() << "\n";
-		for (size_t i = 0; i < i_copy_array.len(); i++)
+		std::cout << "Copy array size = " << i_copy_array.size() << "\n";
+		for (size_t i = 0; i < i_copy_array.size(); i++)
 			std::cout << "copy_array[" << i << "] = " << i_copy_array[i] << " \n";
 		std::cout << "\n";
 
@@ -84,7 +84,7 @@ int main(void)
 		str_array[2] = "has";
 		str_array[3] = "five";
 		str_array[4] = "words";
-		for (size_t i = 0; i < str_array.len(); i++)
+		for (size_t i = 0; i < str_array.size(); i++)
 			std::cout << "str_array[" << i << "] = " << str_array[i] << " \n";
 		std::cout << "\n";
 	}
