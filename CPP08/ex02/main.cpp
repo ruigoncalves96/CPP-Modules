@@ -15,12 +15,12 @@ int main(void)
 		mstack.pop();
 		std::cout << "Stacks size = " << mstack.size() << std::endl;
 		std::cout << "* --- --- --- *\n\n";
+	
+		std::cout << "* Iterators creation and print Stack *\n";
 		mstack.push(3);
 		mstack.push(5);
 		mstack.push(737);
 		mstack.push(0);
-	
-		std::cout << "* Iterators creation and print Stack *\n";
 		MutantStack<int>::iterator it = mstack.begin();
 		MutantStack<int>::iterator ite = mstack.end();
 		++it;

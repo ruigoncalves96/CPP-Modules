@@ -2,9 +2,9 @@
 # define SPAN_HPP
 
 # include <iostream>
-# include <set>
-
-# define RANDOM_RANGE 10000
+# include <vector>
+# include <exception>
+# include <iterator>
 
 class Span
 {
@@ -15,23 +15,38 @@ class Span
 
 		Span &operator=(const Span&);
 
-		unsigned int size(void) const;
-		std::multiset<int> cont(void) const;
+		unsigned int getSize(void) const;
+		const std::vector<int> &getSpan(void) const;
 
 		void addNumber(int);
-		void addRandomNumbers(unsigned int);
+
+		template <typename Iterator>
+		void addMultipleNumbers(Iterator begin, Iterator end);
+
 		unsigned long shortestSpan(void) const;
 		unsigned long longestSpan(void) const;
 
-		void printSpan(void) const;
 
 	private:
 		Span(void);
 
-		int randomNumber(void);
-
-		std::multiset<int> _cont;
+		std::vector<int> _spanContainer;
 		unsigned int _size;
 };
+
+template<typename Iterator>
+void Span::addMultipleNumbers(Iterator begin, Iterator end)
+{
+	std::vector<int> temp;
+	for (Iterator it = begin; it != end; ++it)
+		temp.push_back(*it);
+
+	if (temp.size() > _size - _spanContainer.size())
+		throw(std::out_of_range("Not enough space in Span to add size of iterators")); 
+
+	this->_spanContainer.insert(this->_spanContainer.end(), temp.begin(), temp.end());
+}
+
+std::ostream &operator<<(std::ostream &os, const Span &obj);
 
 #endif

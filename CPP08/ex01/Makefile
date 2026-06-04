@@ -14,10 +14,9 @@ WHITE   = \033[1;37m
 #       FLAGS              #
 # ======================== #
 
-# CXX = g++-14
-# CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -pedantic -pedantic-errors
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -pedantic -pedantic-errors
 CXX = c++
-CXXFLAGS = -Wall -Wextra -Werror -std=c++98
+# CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 RM = rm -f
 
 NAME = Span

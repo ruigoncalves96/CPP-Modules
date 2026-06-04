@@ -1,15 +1,12 @@
 # include "Span.hpp"
 # include <iostream>
 # include <algorithm>
-# include <iterator>
-# include <ctime>
-# include <cstdlib>
 
 Span::Span(void) {}
 
 Span::Span(unsigned int size) : _size(size) {}
 
-Span::Span(const Span &obj) : _cont(obj.cont()), _size(obj.size()) {}
+Span::Span(const Span &obj) : _spanContainer(obj.getSpan()), _size(obj.getSize()) {}
 
 Span::~Span(void) {}
 
@@ -17,85 +14,74 @@ Span &Span::operator=(const Span &obj)
 {
 	if (this != &obj)
 	{
-		this->_size = obj.size();
-		this->_cont = obj.cont();
+		this->_size = obj.getSize();
+		this->_spanContainer = obj.getSpan();
 	}
 	return (*this);
 }
 
-unsigned int Span::size(void) const
+unsigned int Span::getSize(void) const
 {
 	return (this->_size);
 }
 
-std::multiset<int> Span::cont(void) const
+const std::vector<int> &Span::getSpan(void) const
 {
-	return (this->_cont);
+	return (this->_spanContainer);
 }
 
 void Span::addNumber(int value)
 {
-	if (this->_cont.size() == _size)
+	if (this->_spanContainer.size() == _size)
 		throw(std::out_of_range("Span is already full"));
-	this->_cont.insert(value);
-}
-
-void Span::addRandomNumbers(unsigned int countToAdd)
-{
-	if (this->_cont.size() + countToAdd > this->_size)
-		throw(std::out_of_range("Not enough space in Span"));
-
-	for (unsigned int i = 0; i < countToAdd; i++)
-		this->_cont.insert(randomNumber());
+	this->_spanContainer.push_back(value);
 }
 
 unsigned long Span::shortestSpan(void) const
 {
-	if (this->_cont.size() <= 1)
+	if (this->_spanContainer.size() <= 1)
 		throw (std::invalid_argument("Not enough values to search for"));
 
-	std::multiset<int>::const_iterator current = this->_cont.begin();
-	std::multiset<int>::const_iterator next = current;
-	++next;
+	std::vector<int> copy = this->_spanContainer;
+	std::sort(copy.begin(), copy.end());
 
-	unsigned long min_span = *next - *current;
-	while (next != this->_cont.end())
+	std::vector<int>::const_iterator current = copy.begin() + 1;
+
+	unsigned long shortest_spanContainer = *current - *(current - 1);
+	while (current != copy.end())
 	{
-		unsigned long span = *next - *current;
-		if (span < min_span)
-			min_span = span;
 		++current;
-		++next;
+		unsigned long span = *current - *(current - 1);
+		if (span < shortest_spanContainer)
+			shortest_spanContainer = span;
 	}
-	return (min_span);
+	return (shortest_spanContainer);
 }
 
 unsigned long Span::longestSpan(void) const
 {
-	if (this->_cont.size() <= 1)
+	if (this->_spanContainer.size() <= 1)
 		throw (std::invalid_argument("Not enough values to search for"));
-	return (*(--_cont.end()) - *(_cont.begin()));
+	return (*std::max_element(this->_spanContainer.begin(), this->_spanContainer.end()) -
+			*std::min_element(this->_spanContainer.begin(), this->_spanContainer.end()));
 }
 
-void Span::printSpan(void) const
+std::ostream &operator<<(std::ostream &os, const Span &obj)
 {
-	std::multiset<int>::const_iterator it = _cont.begin();
-	while (it != _cont.end())
-		std::cout << *it++ << " ";
-	std::cout << std::endl;
-}
+	const std::vector<int> &objSpanVec = obj.getSpan();
+	std::vector<int>::const_iterator it;
+	size_t i = 0;
 
-//	|| --- Private --- ||
-
-//	Helper function
-int Span::randomNumber()
-{
-	static bool seeded = false;
-	if (!seeded)
+	if (objSpanVec.empty())
+		os << "Span: * is empty *\n";
+	else 
 	{
-		std::srand(std::time(NULL));
-		seeded = true;
+		os << "Span: \n";
+		for (it = objSpanVec.begin(); it != objSpanVec.end(); ++it)
+		{
+			os << "	[" << i << "] = " << *it << "\n";
+			++i;
+		}
 	}
-	return (std::rand() % RANDOM_RANGE);
+	return (os);
 }
-

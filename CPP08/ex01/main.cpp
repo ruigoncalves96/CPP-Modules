@@ -1,5 +1,34 @@
 # include "Span.hpp"
 # include <iostream>
+# include <list>
+# include <ctime>
+# include <cstdlib>
+
+#define S_RANDOM_NUMBER 100
+
+//	Helper function
+int randomNumber()
+{
+	static bool seeded = false;
+	if (!seeded)
+	{
+		std::srand(std::time(NULL));
+		seeded = true;
+	}
+	return (std::rand() % S_RANDOM_NUMBER);
+}
+
+void randomListFill(std::list<int> &list, size_t amount)
+{
+	for (size_t i = 0; i < amount; ++i)
+		list.push_back(randomNumber());
+}
+
+void randomVectorFill(std::vector<int> &vec, size_t amount)
+{
+	for (size_t i = 0; i < amount; ++i)
+		vec.push_back(randomNumber());
+}
 
 int main(void)
 {
@@ -12,7 +41,7 @@ int main(void)
 			sp.addNumber(17);
 			sp.addNumber(9);
 			sp.addNumber(11);
-			// sp.printSpan();
+			std::cout << sp;
 			std::cout << "* Shortest Span = " << sp.shortestSpan() << std::endl;
 			std::cout << "* Longest Span = " << sp.longestSpan() << std::endl;
 		}
@@ -27,8 +56,8 @@ int main(void)
 			sp.addNumber(17);
 			sp.addNumber(9);
 			sp.addNumber(11);
-			sp.addNumber(11);
-			// sp.printSpan();
+			sp.addNumber(42);
+			std::cout << sp;
 			std::cout << "* Shortest Span = " << sp.shortestSpan() << std::endl;
 			std::cout << "* Longest Span = " << sp.longestSpan() << std::endl;
 		}
@@ -39,7 +68,7 @@ int main(void)
 		Span sp = Span(5);
 		try {
 			sp.addNumber(6);
-			// sp.printSpan();
+			std::cout << sp;
 			std::cout << "* Shortest Span = " << sp.shortestSpan() << std::endl;
 			std::cout << "* Longest Span = " << sp.longestSpan() << std::endl;
 		}
@@ -48,9 +77,14 @@ int main(void)
 	std::cout << "\n|| Multiple adding, no errors ||\n";
 	{
 		Span sp = Span(10000);
+		std::vector<int> inputVec;
+		randomVectorFill(inputVec, 5000);
+		std::list<int> inputList;
+		randomListFill(inputList, 5000);
 		try {
-			sp.addRandomNumbers(10000);
-			// sp.printSpan();
+			sp.addMultipleNumbers(inputVec.begin(), inputVec.end());
+			sp.addMultipleNumbers(inputList.begin(), inputList.end());
+			std::cout << sp;
 			std::cout << "* Shortest Span = " << sp.shortestSpan() << std::endl;
 			std::cout << "* Longest Span = " << sp.longestSpan() << std::endl;
 		}
@@ -59,13 +93,14 @@ int main(void)
 	std::cout << "\n|| Multiple adding, with errors - not enough space ||\n";
 	{
 		Span sp = Span(50);
+		std::vector<int> inputVec;
+		randomVectorFill(inputVec, 25);
+		std::list<int> inputList;
+		randomListFill(inputList, 26);
 		try {
-			sp.addRandomNumbers(20);
-			sp.addRandomNumbers(10);
-			sp.addRandomNumbers(5);
-			sp.addRandomNumbers(5);
-			sp.addRandomNumbers(30);
-			// sp.printSpan();
+			sp.addMultipleNumbers(inputVec.begin(), inputVec.end());
+			sp.addMultipleNumbers(inputList.begin(), inputList.end());
+			std::cout << sp;
 			std::cout << "* Shortest Span = " << sp.shortestSpan() << std::endl;
 			std::cout << "* Longest Span = " << sp.longestSpan() << std::endl;
 		}
