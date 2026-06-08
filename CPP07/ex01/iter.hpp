@@ -3,9 +3,11 @@
 
 # include <iostream>
 
-template <typename T>
-void iter(T *array, const size_t array_len, void (*func)(T &value))
+template <typename T, typename Func>
+void iter(T *array, const size_t array_len, Func func)
 {
+	if (!array)
+		return ;
 	for (size_t i = 0; i < array_len; i++)
 		func(array[i]);
 }
@@ -17,7 +19,7 @@ void add_one(T &value)
 }
 
 template <typename T>
-void print(T value)
+void print(const T &value)
 {
 	std::cout << value << " ";
 }
