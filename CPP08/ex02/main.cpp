@@ -68,6 +68,13 @@ int main(void)
 	{
 		std::list<int> mstack;
 	
+		std::cout << "\n* Using std::list members *\n";
+		mstack.push_back(5);
+		mstack.push_back(17);
+		std::cout << "Poping value -> " << mstack.back() << std::endl;
+		mstack.pop_back();
+		std::cout << "Stacks size = " << mstack.size() << std::endl;
+		std::cout << "* --- --- --- *\n\n";
 		mstack.push_back(3);
 		mstack.push_back(5);
 		mstack.push_back(737);

@@ -84,7 +84,7 @@ int main(void)
 		try {
 			sp.addMultipleNumbers(inputVec.begin(), inputVec.end());
 			sp.addMultipleNumbers(inputList.begin(), inputList.end());
-			std::cout << sp;
+			// std::cout << sp;
 			std::cout << "* Shortest Span = " << sp.shortestSpan() << std::endl;
 			std::cout << "* Longest Span = " << sp.longestSpan() << std::endl;
 		}

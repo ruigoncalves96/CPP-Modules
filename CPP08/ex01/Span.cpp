@@ -1,6 +1,7 @@
 # include "Span.hpp"
 # include <iostream>
 # include <algorithm>
+# include <limits>
 
 Span::Span(void) {}
 
@@ -47,13 +48,13 @@ unsigned long Span::shortestSpan(void) const
 
 	std::vector<int>::const_iterator current = copy.begin() + 1;
 
-	unsigned long shortest_spanContainer = *current - *(current - 1);
+	long shortest_spanContainer = std::numeric_limits<int>::max();
 	while (current != copy.end())
 	{
-		++current;
-		unsigned long span = *current - *(current - 1);
+		long span = *current - *(current - 1);
 		if (span < shortest_spanContainer)
 			shortest_spanContainer = span;
+		++current;
 	}
 	return (shortest_spanContainer);
 }
