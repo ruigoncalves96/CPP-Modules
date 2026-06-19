@@ -1,4 +1,5 @@
-# pragma once
+#ifndef BITCOINEXCHANGE_HPP
+# define BITCOINEXCHANGE_HPP
 
 #include <iostream>
 #include <sstream>
@@ -72,3 +73,5 @@ std::string varToString(const T var)
 	
 	return (ss.str());
 }
+
+#endif
