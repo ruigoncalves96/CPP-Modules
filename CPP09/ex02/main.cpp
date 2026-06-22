@@ -43,6 +43,8 @@ int main(int argc, char *argv[])
 		std::cout << "Time to process a range of " << sorter.getSortedVec().size() << " elements with std::vector<int> : " << timeVec << " us" << std::endl;
 		// std::cout << "Time to process a range of " << sorter.getSortedList().size() << " elements with std::list<int> : " << timeList << " us" << std::endl;
 
+//!		REMOVE IS SORTED
+		std::cout << "\nis sorted = " << std::is_sorted(sorter.getSortedVec().begin(), sorter.getSortedVec().end()) << "\n";
 	}
 	catch (const std::exception &e) { std::cerr << "Error: " << e.what() << std::endl; }
 

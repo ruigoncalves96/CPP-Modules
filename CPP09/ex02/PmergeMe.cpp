@@ -69,8 +69,8 @@ void PmergeMe::mergeInsertVecPair(VecPair &mainContainer)
 
 void PmergeMe::insertVecPairPedants(VecPair &mainChain, VecPair &pendChain)
 {
-	//	freebie -> we know that the first pendant is smaller than the first main
-	mainChain.insert(mainChain.begin(), pendChain.front());
+	if (pendChain.empty())
+		return ;
 
 	std::vector<int> jacobsthal = jacobsthalSeq(pendChain.size());
 	std::vector<int>::iterator jacobsthal_needle = jacobsthal.begin() + 1;
@@ -78,10 +78,11 @@ void PmergeMe::insertVecPairPedants(VecPair &mainChain, VecPair &pendChain)
 
 	for (; jacobsthal_needle != jacobsthal.end(); ++jacobsthal_needle)
 	{
-		int jacobsthal_index = *jacobsthal_needle > pendSize ? pendSize - 1 : *jacobsthal_needle - 1;
-		for (; jacobsthal_index >= *(jacobsthal_needle - 1); --jacobsthal_index)
+		int pendIndex = *jacobsthal_needle - 1 > pendSize - 1 ? pendSize - 1 : *jacobsthal_needle - 1;
+		int stopIndex = *(jacobsthal_needle - 1) == 1 ? 0 : *(jacobsthal_needle - 1);
+		for (; pendIndex >= stopIndex; --pendIndex)
 		{
-			Pair pendToInsert = pendChain[jacobsthal_index];
+			Pair pendToInsert = pendChain[pendIndex];
 			VecPair::iterator insertion_it = std::upper_bound(mainChain.begin(), mainChain.end(), pendToInsert);
 			mainChain.insert(insertion_it, pendToInsert);
 		}
@@ -192,6 +193,5 @@ std::vector<int> PmergeMe::jacobsthalSeq(int size)
 
 //!	NOTES:
 /*
-	TODO: * Parsing -> accept: './PmergeMe "1 2 3 4" 0 5' ?
-	TODO: *	Parsing -> handle duplicates
+	TODO:	* check if isOdd and straggler need to reset after finishing one sort or even get into the function;
 */
