@@ -20,33 +20,38 @@ class PmergeMe
 		std::vector<int> sortVec(void);
 		std::list<int> sortList(void);
 
+		size_t getComparisons(void) const;
 		const std::vector<int> &getUnsorted(void) const;
 		const std::vector<int> &getSortedVec(void) const;
 		const std::list<int> &getSortedList(void) const;
 
 	private:
-		typedef std::pair<int, int> Pair;
-		typedef std::vector<Pair> VecPair;
-		
-		// std::vector<int>
-		void mergeInsertVecPair(VecPair &mainContainer);
-		void insertVecPairPedants(VecPair &mainChain, VecPair &pendChain);
-		void push_to_chains(const VecPair &mainContainer, VecPair &mainChain, VecPair &pendChain);
-		void assembleVecPair(VecPair &pairedVec);
-		VecPair pairVecPairs();
-
-		//	Utilities
-		static std::vector<int> jacobsthalSeq(int size);
-
-		template <typename Container>
-		Container parseInput(char **args);
-
 		std::vector<int> _unsortedContainer;
+	
+		size_t _comparisons;
 		std::vector<int> _vecContainer;
 		std::list<int> _listContainer;
 
-		bool _isOdd;
-		int _straggler;
+		typedef std::pair<int, int> Pair;
+		typedef std::vector<Pair> VecPair;
+		typedef std::list<Pair> ListPair;
+		
+		// std::vector<int>
+		void splitPairs(const std::vector<int> &indices, VecPair &pairs, int &straggler, bool &hasStraggler);
+		void buildInitialChain(const std::vector<int> &sortedWinners, const std::vector<int> &partner, std::vector<int> &mainChain, VecPair &pending);
+		std::vector<int> generateInsertionSequence(int pendingSize) const;
+		int countedLowerBound(const std::vector<int> &mainChain, int rangeEnd, int target);
+		int insertElementBounded(std::vector<int> &mainChain, int value, int upperBound);
+		void insertPending(std::vector<int> &mainChain, VecPair &pending);
+		std::vector<int> mergeInsertionSort(std::vector<int> indices);
+
+		// std::list<int>
+
+
+		bool valueLess(int idxA, int idxB);
+
+		template <typename Container>
+		Container parseInput(char **args);
 };
 
 template <typename T>
@@ -94,3 +99,37 @@ Container PmergeMe::parseInput(char **args)
 }
 
 #endif
+
+/*
+	size_t           getComparisons(void) const;
+
+private:
+	size_t           _comparisons;
+
+	bool valueLess(int idxA, int idxB);
+
+	void splitPairs(const std::vector<int> &indices,
+					std::vector<int> &winners,
+					std::vector<int> &partner,
+					int &straggler, bool &hasStraggler);
+
+	void buildInitialChain(const std::vector<int> &sortedWinners,
+						   const std::vector<int> &partner,
+						   std::vector<int> &mainChain,
+						   std::vector<int> &pending,
+						   std::vector<int> &boundPositions);
+
+	std::vector<int> generateInsertionSequence(int pendingSize) const;
+
+	int countedLowerBound(const std::vector<int> &mainChain, int rangeEnd, int target);
+	int insertElementBounded(std::vector<int> &mainChain, int value, int upperBound);
+
+	void insertPending(std::vector<int> &mainChain,
+					   const std::vector<int> &pending,
+					   std::vector<int> &boundPositions);
+
+	std::vector<int> mergeInsertionSort(std::vector<int> indices);
+};
+
+#endif
+*/

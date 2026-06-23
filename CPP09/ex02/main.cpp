@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 		// std::clock_t endList= std::clock();
 
 		double timeVec = static_cast<double>(endVec - startVec) / CLOCKS_PER_SEC * 1000000.0;
-		// double timelist = static_cast<double>((endList - startList) / CLOCKS_PER_SEC * 1000000.0);
+		// double timeList = static_cast<double>(endList - startList) / CLOCKS_PER_SEC * 1000000.0;
 
 		std::cout << std::fixed << std::setprecision(5);
 		std::cout << "Before: " << sorter.getUnsorted() << "\n";
@@ -43,10 +43,11 @@ int main(int argc, char *argv[])
 		std::cout << "Time to process a range of " << sorter.getSortedVec().size() << " elements with std::vector<int> : " << timeVec << " us" << std::endl;
 		// std::cout << "Time to process a range of " << sorter.getSortedList().size() << " elements with std::list<int> : " << timeList << " us" << std::endl;
 
-//!		REMOVE IS SORTED
-		std::cout << "\nis sorted = " << std::is_sorted(sorter.getSortedVec().begin(), sorter.getSortedVec().end()) << "\n";
+//!		----- REMOVE IS SORTED -----
+		std::cout << "\nVEC is sorted = " << std::is_sorted(sorter.getSortedVec().begin(), sorter.getSortedVec().end()) << "\n";
+		// std::cout << "LIST is sorted = " << std::is_sorted(sorter.getSortedList().begin(), sorter.getSortedList().end()) << "\n";
 	}
-	catch (const std::exception &e) { std::cerr << "Error: " << e.what() << std::endl; }
+	catch (const std::exception &e) { std::cerr << "Error: " << e.what() << std::endl; return (1);}
 
 	return (0);
 }

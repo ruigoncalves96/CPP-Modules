@@ -1,8 +1,9 @@
 #include "PmergeMe.hpp"
 #include <string>
+#include <iterator>
 #include <utility>
 
-PmergeMe::PmergeMe() {}
+PmergeMe::PmergeMe() : _comparisons(0) {}
 
 PmergeMe::PmergeMe(char **args)
 {
@@ -33,165 +34,175 @@ const std::vector<int>& PmergeMe::getSortedVec(void) const {return (_vecContaine
 
 const std::list<int>& PmergeMe::getSortedList(void) const {return (_listContainer);}
 
-
-//* || ----- Main sort ----- ||
-
-std::vector<int> PmergeMe::sortVec(void)
+size_t PmergeMe::getComparisons(void) const
 {
-	VecPair pairedVec = pairVecPairs();
-	mergeInsertVecPair(pairedVec);
-	assembleVecPair(pairedVec);
-
-	return (this->_vecContainer);
+	return _comparisons;
 }
 
-std::list<int> PmergeMe::sortList(void)
+bool PmergeMe::valueLess(int idxA, int idxB)
 {
-	return (_listContainer);
+	_comparisons++;
+	return _unsortedContainer[idxA] < _unsortedContainer[idxB];
 }
 
-//* || ----- Vector {std::vector<int>} functions ----- ||
-
-void PmergeMe::mergeInsertVecPair(VecPair &mainContainer)
+// ==========================================
+// Phase 1: Pairing
+// ==========================================
+void PmergeMe::splitPairs(const std::vector<int> &indices, VecPair &pairs, int &straggler, bool &hasStraggler)
 {
-	if (mainContainer.size() < 2)
-		return ;
+	size_t n = indices.size();
+	hasStraggler = (n % 2 != 0);
+	size_t pairCount = hasStraggler ? n - 1 : n;
 
-	VecPair mainChain;
-	VecPair pendChain;
-	push_to_chains(mainContainer, mainChain, pendChain);
-
-	mergeInsertVecPair(mainChain);
-
-	insertVecPairPedants(mainChain, pendChain);
-	mainContainer = mainChain;
-}
-
-void PmergeMe::insertVecPairPedants(VecPair &mainChain, VecPair &pendChain)
-{
-	if (pendChain.empty())
-		return ;
-
-	std::vector<int> jacobsthal = jacobsthalSeq(pendChain.size());
-	std::vector<int>::iterator jacobsthal_needle = jacobsthal.begin() + 1;
-	int pendSize = static_cast<int>(pendChain.size());
-
-	for (; jacobsthal_needle != jacobsthal.end(); ++jacobsthal_needle)
+	for (size_t i = 0; i < pairCount; i += 2)
 	{
-		int pendIndex = *jacobsthal_needle - 1 > pendSize - 1 ? pendSize - 1 : *jacobsthal_needle - 1;
-		int stopIndex = *(jacobsthal_needle - 1) == 1 ? 0 : *(jacobsthal_needle - 1);
-		for (; pendIndex >= stopIndex; --pendIndex)
-		{
-			Pair pendToInsert = pendChain[pendIndex];
-			VecPair::iterator insertion_it = std::upper_bound(mainChain.begin(), mainChain.end(), pendToInsert);
-			mainChain.insert(insertion_it, pendToInsert);
-		}
+		int a = indices[i];
+		int b = indices[i + 1];
+		if (valueLess(a, b))
+			std::swap(a, b);
+		pairs.push_back(std::make_pair(a, b)); // (winner, loser)
+	}
+	if (hasStraggler)
+		straggler = indices[n - 1];
+}
+
+// ==========================================
+// Phase 2: Chain construction
+// ==========================================
+void PmergeMe::buildInitialChain(const std::vector<int> &sortedWinners, const std::vector<int> &partner, std::vector<int> &mainChain, VecPair &pending)
+{
+	mainChain.push_back(partner[sortedWinners[0]]);
+	mainChain.push_back(sortedWinners[0]);
+
+	for (size_t i = 1; i < sortedWinners.size(); ++i)
+	{
+		mainChain.push_back(sortedWinners[i]);
+		int bound = static_cast<int>(mainChain.size()) - 1;
+		pending.push_back(std::make_pair(partner[sortedWinners[i]], bound));
 	}
 }
 
-void PmergeMe::push_to_chains(const VecPair &mainContainer, VecPair &mainChain, VecPair &pendChain)
-{
-	bool isOdd = mainContainer.size() % 2;
-	size_t containerLimit = isOdd ? mainContainer.size() - 1 : mainContainer.size();
-
-	for (size_t i = 0; i < containerLimit; i += 2)
-	{
-		if (mainContainer[i].first > mainContainer[i + 1].first)
-		{
-			mainChain.push_back(mainContainer[i]);
-			pendChain.push_back(mainContainer[i + 1]);
-		}
-		else
-		{
-			mainChain.push_back(mainContainer[i + 1]);
-			pendChain.push_back(mainContainer[i]);
-		}
-	}
-	if (isOdd)
-		pendChain.push_back(mainContainer.back());
-}
-
-void PmergeMe::assembleVecPair(VecPair &pairedVec)
-{
-	std::vector<int> mainChain;
-	std::vector<int> pendChain;
-	for (size_t i = 0; i < pairedVec.size(); ++i)
-	{
-		mainChain.push_back(pairedVec[i].first);
-		pendChain.push_back(pairedVec[i].second);
-	}
-	if (this->_isOdd)
-		pendChain.push_back(this->_straggler);
-
-	mainChain.insert(mainChain.begin(), pendChain.front());
-
-	std::vector<int> jacobsthal = jacobsthalSeq(pendChain.size());
-	std::vector<int>::iterator jacobsthal_needle = jacobsthal.begin() + 1;
-	int pendSize = static_cast<int>(pendChain.size());
-
-	for (; jacobsthal_needle != jacobsthal.end(); ++jacobsthal_needle)
-	{
-		int jacobsthal_index = *jacobsthal_needle > pendSize ? pendSize - 1 : *jacobsthal_needle - 1;
-		for (; jacobsthal_index >= *(jacobsthal_needle - 1); --jacobsthal_index)
-		{
-			int pendToInsert = pendChain[jacobsthal_index];
-			std::vector<int>::iterator insertion_it = std::upper_bound(mainChain.begin(), mainChain.end(), pendToInsert);
-			mainChain.insert(insertion_it, pendToInsert);
-		}
-	}
-	this->_vecContainer = mainChain;
-}
-
-std::vector<PmergeMe::Pair> PmergeMe::pairVecPairs(void)
-{
-	_isOdd = this->_vecContainer.size() % 2;
-	if (_isOdd)
-	{
-		_straggler = this->_vecContainer.back();
-		this->_vecContainer.pop_back();
-	}
-
-	VecPair mainContainer;
-	for (size_t i = 0; i < this->_vecContainer.size(); i += 2)
-	{
-		Pair temp;
-		if (this->_vecContainer[i] > this->_vecContainer[i + 1])
-		{
-			temp.first = this->_vecContainer[i];
-			temp.second = this->_vecContainer[i + 1];
-		}
-		else
-		{
-			temp.first = this->_vecContainer[i + 1];
-			temp.second = this->_vecContainer[i];
-		}
-		mainContainer.push_back(temp);
-	}
-	return (mainContainer);
-}
-
-//* || ----- List {std::list<int>} functions ----- ||
-
-
-//* || ----- Utilities ----- ||
-
-std::vector<int> PmergeMe::jacobsthalSeq(int size)
+// ==========================================
+// Phase 3: Jacobsthal insertion order
+// ==========================================
+std::vector<int> PmergeMe::generateInsertionSequence(int pendingSize) const
 {
 	std::vector<int> sequence;
-	sequence.push_back(1);
-	sequence.push_back(3);
-	for (size_t i = 2; sequence[i - 1] <= size; ++i)
+	if (pendingSize == 0)
+		return sequence;
+
+	std::vector<int> jacob;
+	jacob.push_back(1);
+	jacob.push_back(3);
+	while (jacob.back() < pendingSize + 1)
+		jacob.push_back(jacob[jacob.size() - 1] + 2 * jacob[jacob.size() - 2]);
+
+	int lastJacob = 1;
+	for (size_t i = 1; i < jacob.size(); ++i)
 	{
-		int jacobsthal_calc = sequence[i - 1] + (sequence[i - 2] * 2);
-		sequence.push_back(jacobsthal_calc);
+		int start = std::min(jacob[i], pendingSize + 1);
+		for (int j = start; j > lastJacob; --j)
+			sequence.push_back(j - 2);
+		lastJacob = jacob[i];
+		if (lastJacob >= pendingSize + 1)
+			break;
 	}
 	return (sequence);
 }
 
+// ==========================================
+// Bounded binary search / insertion (shared by pending + straggler)
+// ==========================================
+int PmergeMe::countedLowerBound(const std::vector<int> &mainChain, int rangeEnd, int target)
+{
+	int lo = 0;
+	int hi = rangeEnd;
 
+	while (lo < hi)
+	{
+		int mid = lo + (hi - lo) / 2;
+		if (valueLess(mainChain[mid], target))
+			lo = mid + 1;
+		else
+			hi = mid;
+	}
+	return (lo);
+}
 
+int PmergeMe::insertElementBounded(std::vector<int> &mainChain, int value, int upperBound)
+{
+	int offset = countedLowerBound(mainChain, upperBound, value);
+	mainChain.insert(mainChain.begin() + offset, value);
+	return (offset);
+}
 
-//!	NOTES:
-/*
-	TODO:	* check if isOdd and straggler need to reset after finishing one sort or even get into the function;
-*/
+void PmergeMe::insertPending(std::vector<int> &mainChain, VecPair &pending)
+{
+	std::vector<int> order = generateInsertionSequence(static_cast<int>(pending.size()));
+
+	for (size_t i = 0; i < order.size(); ++i)
+	{
+		int idx = order[i];
+		int offset = insertElementBounded(mainChain, pending[idx].first, pending[idx].second);
+
+		for (size_t k = 0; k < pending.size(); ++k)
+			if (pending[k].second >= offset)
+				pending[k].second++;
+	}
+}
+
+// ==========================================
+// Recursive core — this IS Ford-Johnson, not a stand-in merge sort
+// ==========================================
+std::vector<int> PmergeMe::mergeInsertionSort(std::vector<int> indices)
+{
+	if (indices.size() <= 1)
+		return indices;
+
+	VecPair pairs;
+	int  straggler = 0;
+	bool hasStraggler = false;
+	splitPairs(indices, pairs, straggler, hasStraggler);
+
+	std::vector<int> winners;
+	std::vector<int> partner(_unsortedContainer.size(), -1);
+	for (size_t i = 0; i < pairs.size(); ++i)
+	{
+		winners.push_back(pairs[i].first);
+		partner[pairs[i].first] = pairs[i].second;
+	}
+
+	std::vector<int> sortedWinners = mergeInsertionSort(winners);
+
+	std::vector<int> mainChain;
+	VecPair pending;
+	buildInitialChain(sortedWinners, partner, mainChain, pending);
+	insertPending(mainChain, pending);
+
+	if (hasStraggler)
+		insertElementBounded(mainChain, straggler, static_cast<int>(mainChain.size()));
+
+	return (mainChain);
+}
+
+// ==========================================
+// Entry point
+// ==========================================
+std::vector<int> PmergeMe::sortVec(void)
+{
+	_comparisons = 0;
+
+	std::vector<int> indices(_unsortedContainer.size());
+	for (size_t i = 0; i < indices.size(); ++i)
+		indices[i] = static_cast<int>(i);
+
+	std::vector<int> sortedIndices = mergeInsertionSort(indices);
+
+	std::vector<int> result(sortedIndices.size());
+	for (size_t i = 0; i < sortedIndices.size(); ++i)
+		result[i] = _unsortedContainer[sortedIndices[i]];
+
+	_vecContainer = result;
+	return (_vecContainer);
+}
+
