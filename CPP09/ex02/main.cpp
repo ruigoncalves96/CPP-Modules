@@ -41,6 +41,7 @@ int main(int argc, char *argv[])
 		std::cout << "Before: " << sorter.getUnsorted() << "\n";
 		std::cout << "After: " << sorter.getSortedVec() << "\n";
 		std::cout << "Time to process a range of " << sorter.getSortedVec().size() << " elements with std::vector<int> : " << timeVec << " us" << std::endl;
+		std::cout << "Comparisons = " << sorter.getComparisons() << "\n";
 		// std::cout << "Time to process a range of " << sorter.getSortedList().size() << " elements with std::list<int> : " << timeList << " us" << std::endl;
 
 //!		----- REMOVE IS SORTED -----
