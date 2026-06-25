@@ -4,7 +4,6 @@
 #include <iostream>
 #include <sstream>
 #include <exception>
-#include <algorithm>
 #include <vector>
 #include <list>
 
@@ -18,7 +17,7 @@ class PmergeMe
 		~PmergeMe();
 
 		std::vector<int> sortVec(void);
-		// std::list<int> sortList(void);
+		std::list<int> sortList(void);
 
 		size_t getComparisons(void) const;
 		const std::vector<int> &getUnsorted(void) const;
@@ -27,38 +26,45 @@ class PmergeMe
 
 	private:
 		std::vector<int> _unsortedContainer;
-	
-		size_t _comparisons;
 		std::vector<int> _vecContainer;
 		std::list<int> _listContainer;
+		size_t _comparisons;
 
 		typedef std::vector<int> Vector;
+		typedef std::list<int> List;
 		typedef std::pair<int, int> Pair;
 		typedef std::vector<Pair> VecPair;
-		typedef std::list<Pair> ListPair;
 		
 		// Vector
-		void mergeInsertionSort(Vector &vecIndexes);
+		void mergeInsertionSortVec(Vector &vecIndexes);
 		void pairVec(const Vector &indexes, Vector &winners, Vector &partners, int &straggler, bool &isOdd);
-		void insertChain(const Vector &winners, const Vector &partner, Vector &mainChain);
+		void insertVecChain(const Vector &winners, const Vector &partner, Vector &mainChain);
 		
-		void insertPending(Vector &mainChain, VecPair &pending);
-		int insertElement(Vector &mainChain, int upperBound, int value);
-		int fordLowerBound(const Vector &mainChain, int upperBound, int value);
+		void insertPendingVec(Vector &mainChain, VecPair &pending);
+		int insertElementVec(Vector &mainChain, int upperBound, int value);
+		int fordLowerBoundVec(const Vector &mainChain, int upperBound, int value);
 
-		Vector initializeIndexes(void) const;
+		Vector initializeVecIndexes(void) const;
 		Vector assignVecIndexValues(const Vector &sortedVecIndexes) const;
 
 		//	std::list<int>
+		void mergeInsertionSortList(List &listIndexes);
+		void pairList(const List &indexes, List &winners, Vector &partners, int &straggler, bool &isOdd);
+		void insertListChain(const List &winners, const Vector &partner, List &mainChain);
+
+		void insertPendingList(List &mainChain, VecPair &pending);
+		int insertElementList(List &mainChain, int upperBound, int value);
+		int fordLowerBoundList(List &mainChain, int upperBound, int value, List::iterator &it_offset);
+
+		List initializeListIndexes(void) const;
+		List assignListIndexValues(const List &sortedListIndexes) const;
 
 		//	Insertion Sequence / Jacobsthal
 		static Vector generateInsertionSequence(int pendingSize);
 		static Vector generateJacobsthal(int limit);
 
+		Vector parseInput(char **args);
 		bool valueLess(int idxA, int idxB);
-
-		template <typename Container>
-		Container parseInput(char **args);
 };
 
 template <typename T>
@@ -83,26 +89,6 @@ std::string varToString(const T var)
 		throw std::runtime_error("Invalid Variable conversion");
 	
 	return (ss.str());
-}
-
-template <typename Container>
-Container PmergeMe::parseInput(char **args)
-{
-	Container container;
-	for (size_t i = 0; args[i]; ++i)
-	{
-		std::string s_number = args[i];
-		if (s_number.empty())
-			throw std::runtime_error("empty argument.");
-		if (s_number.find_first_not_of("0123456789") != std::string::npos)
-			throw std::runtime_error("invalid argument format '" + varToString(s_number) + "'");
-
-		int i_number = stringToNumber<int>(s_number);
-		if (std::find(container.begin(), container.end(), i_number) != container.end())
-			throw std::runtime_error("duplicate argument.");
-		container.push_back(i_number);
-	}
-	return (container);
 }
 
 #endif

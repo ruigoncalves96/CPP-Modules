@@ -19,9 +19,8 @@ std::ostream &operator<<(std::ostream &os, const std::list<int> &list)
 
 int main(int argc, char *argv[])
 {
-	(void)argv;
-	if (argc < 3)
-		return (std::cerr << "Error: need minimun 2 numbers." << std::endl, 1);
+	if (argc < 2)
+		return (std::cerr << "Error: no arguments." << std::endl, 1);
 
 	try {
 		PmergeMe sorter(&argv[1]);
@@ -29,24 +28,27 @@ int main(int argc, char *argv[])
 		std::clock_t startVec = std::clock();
 		sorter.sortVec();
 		std::clock_t endVec= std::clock();
+		size_t vecComparisons = sorter.getComparisons();
 
-		// std::clock_t startList = std::clock();
-		// std::list<int> listSorted = sorter.sortList();
-		// std::clock_t endList= std::clock();
+		std::clock_t startList = std::clock();
+		std::list<int> listSorted = sorter.sortList();
+		std::clock_t endList= std::clock();
+		size_t listComparisons = sorter.getComparisons();
 
 		double timeVec = static_cast<double>(endVec - startVec) / CLOCKS_PER_SEC * 1000000.0;
-		// double timeList = static_cast<double>(endList - startList) / CLOCKS_PER_SEC * 1000000.0;
+		double timeList = static_cast<double>(endList - startList) / CLOCKS_PER_SEC * 1000000.0;
 
 		std::cout << std::fixed << std::setprecision(5);
 		std::cout << "Before: " << sorter.getUnsorted() << "\n";
 		std::cout << "After: " << sorter.getSortedVec() << "\n";
 		std::cout << "Time to process a range of " << sorter.getSortedVec().size() << " elements with std::vector<int> : " << timeVec << " us" << std::endl;
-		std::cout << "Comparisons = " << sorter.getComparisons() << "\n";
-		// std::cout << "Time to process a range of " << sorter.getSortedList().size() << " elements with std::list<int> : " << timeList << " us" << std::endl;
+		std::cout << "Time to process a range of " << sorter.getSortedList().size() << " elements with std::list<int> : " << timeList << " us" << std::endl;
+		std::cout << "Vector Comparisons = " << vecComparisons << "\n";
+		std::cout << "List Comparisons = " << listComparisons << "\n";
 
 //!		----- REMOVE IS SORTED -----
-		std::cout << "\nVEC is sorted = " << std::is_sorted(sorter.getSortedVec().begin(), sorter.getSortedVec().end()) << "\n";
-		// std::cout << "LIST is sorted = " << std::is_sorted(sorter.getSortedList().begin(), sorter.getSortedList().end()) << "\n";
+// 		std::cout << "\nVEC is sorted = " << std::is_sorted(sorter.getSortedVec().begin(), sorter.getSortedVec().end()) << "\n";
+// 		std::cout << "LIST is sorted = " << std::is_sorted(sorter.getSortedList().begin(), sorter.getSortedList().end()) << "\n";
 	}
 	catch (const std::exception &e) { std::cerr << "Error: " << e.what() << std::endl; return (1);}
 
