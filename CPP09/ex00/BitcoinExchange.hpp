@@ -20,14 +20,13 @@ class BitcoinExchange
 {
 	public:
 		BitcoinExchange();
+		BitcoinExchange(const BitcoinExchange &);
+		BitcoinExchange& operator=(const BitcoinExchange &);
 		~BitcoinExchange();
 
 		void printConversion(const std::string &filePath);
 
 	private:
-		BitcoinExchange(const BitcoinExchange &);
-		BitcoinExchange& operator=(const BitcoinExchange &);
-
 		//	Data File methods
 		void importDataBase(void);
 		t_data extractDataLine(const std::string &buffer) const;

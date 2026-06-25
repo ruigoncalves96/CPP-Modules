@@ -5,16 +5,21 @@
 
 BitcoinExchange::BitcoinExchange() { importDataBase(); }
 
-BitcoinExchange::BitcoinExchange(const BitcoinExchange &obj) { (void)obj; }
+BitcoinExchange::BitcoinExchange(const BitcoinExchange &obj) { *this = obj; }
 
-BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange &obj) { (void)obj; return (*this); }
+BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange &obj)
+{
+	if (this != &obj)
+		this->_data = obj._data;
+	return (*this);
+}
 
 BitcoinExchange::~BitcoinExchange() {}
 
 void BitcoinExchange::printConversion(const std::string &filePath)
 {
 	std::ifstream inputFile;
-	inputFile.open(filePath);
+	inputFile.open(filePath.c_str());
 	if (!inputFile.is_open())
 		throw std::runtime_error("Unable to open file: '" + filePath + "'");
 
@@ -125,8 +130,8 @@ std::string BitcoinExchange::parseDate(const std::string &date)
 		throw std::runtime_error("Invalid date.");
 	else if (month == 2)
 	{
-		if ((isLeapYear(year) && day > 29) || day > 28)
-			throw std::runtime_error("Invalid date - Leap Year");
+		if (isLeapYear(year) ? day > 29 : day > 28)
+			throw std::runtime_error("Invalid date.");
 	}
 	return (date);
 }
@@ -175,12 +180,3 @@ void BitcoinExchange::hasInvalidChar(const std::string &str, const std::string &
 	if (invalidChar != std::string::npos)
 		throw std::runtime_error("Invalid character {'" + varToString(str[invalidChar]) + "'}");
 }
-
-
-
-
-/*
-*	TO DO:
-
-!		Check Leap year (e.g. 2012-02-29 should work)
-*/
