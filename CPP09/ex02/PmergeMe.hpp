@@ -38,7 +38,7 @@ class PmergeMe
 		// Vector
 		void mergeInsertionSortVec(Vector &vecIndexes);
 		void pairVec(const Vector &indexes, Vector &winners, Vector &partners, int &straggler, bool &isOdd);
-		void insertVecChain(const Vector &winners, const Vector &partner, Vector &mainChain);
+		void insertVecChain(const Vector &winners, const Vector &partner, Vector &mainChain, bool isOdd, int straggler);
 		
 		void insertPendingVec(Vector &mainChain, VecPair &pending);
 		int insertElementVec(Vector &mainChain, int upperBound, int value);
@@ -50,7 +50,7 @@ class PmergeMe
 		//	std::list<int>
 		void mergeInsertionSortList(List &listIndexes);
 		void pairList(const List &indexes, List &winners, Vector &partners, int &straggler, bool &isOdd);
-		void insertListChain(const List &winners, const Vector &partner, List &mainChain);
+		void insertListChain(const List &winners, const Vector &partner, List &mainChain, bool isOdd, int straggler);
 
 		void insertPendingList(List &mainChain, VecPair &pending);
 		int insertElementList(List &mainChain, int upperBound, int value);

@@ -75,9 +75,7 @@ void PmergeMe::mergeInsertionSortVec(Vector &vecIndexes)
 
 	// Insertion section
 	Vector mainChain;
-	insertVecChain(winners, winnerPartner, mainChain);
-	if (isOdd)
-		insertElementVec(mainChain, static_cast<int>(mainChain.size()), straggler);
+	insertVecChain(winners, winnerPartner, mainChain, isOdd, straggler);
 	// ----
 
 	vecIndexes = mainChain;
@@ -104,7 +102,7 @@ void PmergeMe::pairVec(const Vector &indexes, Vector &winners, Vector &partners,
 }
 
 // Phase 2: Chain construction
-void PmergeMe::insertVecChain(const Vector &winners, const Vector &partner, Vector &mainChain)
+void PmergeMe::insertVecChain(const Vector &winners, const Vector &partner, Vector &mainChain, bool isOdd, int straggler)
 {
 	VecPair pending;
 
@@ -117,6 +115,9 @@ void PmergeMe::insertVecChain(const Vector &winners, const Vector &partner, Vect
 		int bound = static_cast<int>(mainChain.size()) - 1;
 		pending.push_back(std::make_pair(partner[winners[i]], bound));
 	}
+	if (isOdd)
+		pending.push_back(std::make_pair(straggler, static_cast<int>(mainChain.size())));
+
 	insertPendingVec(mainChain, pending);
 }
 
@@ -213,9 +214,7 @@ void PmergeMe::mergeInsertionSortList(List &listIndexes)
 
 	// Insertion section
 	List mainChain;
-	insertListChain(winners, winnerPartner, mainChain);
-	if (isOdd)
-		insertElementList(mainChain, static_cast<int>(mainChain.size()), straggler);
+	insertListChain(winners, winnerPartner, mainChain, isOdd, straggler);
 	// ----
 
 	listIndexes = mainChain;
@@ -249,7 +248,7 @@ void PmergeMe::pairList(const List &indexes, List &winners, Vector &partners, in
 }
 
 // Phase 2: Chain construction
-void PmergeMe::insertListChain(const List &winners, const Vector &partner, List &mainChain)
+void PmergeMe::insertListChain(const List &winners, const Vector &partner, List &mainChain, bool isOdd, int straggler)
 {
 	VecPair pending;
 
@@ -266,6 +265,9 @@ void PmergeMe::insertListChain(const List &winners, const Vector &partner, List 
 		pending.push_back(std::make_pair(partner[*it], bound));
 		++it;
 	}
+	if (isOdd)
+		pending.push_back(std::make_pair(straggler, static_cast<int>(mainChain.size())));
+
 	insertPendingList(mainChain, pending);
 }
 

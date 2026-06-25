@@ -47,8 +47,8 @@ int main(int argc, char *argv[])
 		std::cout << "List Comparisons = " << listComparisons << "\n";
 
 //!		----- REMOVE IS SORTED -----
-// 		std::cout << "\nVEC is sorted = " << std::is_sorted(sorter.getSortedVec().begin(), sorter.getSortedVec().end()) << "\n";
-// 		std::cout << "LIST is sorted = " << std::is_sorted(sorter.getSortedList().begin(), sorter.getSortedList().end()) << "\n";
+		std::cout << "\nVEC is sorted = " << std::is_sorted(sorter.getSortedVec().begin(), sorter.getSortedVec().end()) << "\n";
+		std::cout << "LIST is sorted = " << std::is_sorted(sorter.getSortedList().begin(), sorter.getSortedList().end()) << "\n";
 	}
 	catch (const std::exception &e) { std::cerr << "Error: " << e.what() << std::endl; return (1);}
 
