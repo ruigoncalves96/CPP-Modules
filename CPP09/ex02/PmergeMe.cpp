@@ -14,9 +14,9 @@ PmergeMe& PmergeMe::operator=(const PmergeMe &obj)
 {
 	if (this != &obj)
 	{
-		_vecContainer = obj._vecContainer;
-		_listContainer = obj._listContainer;
 		_unsortedContainer = obj._unsortedContainer;
+		_vecContainer = obj._vecContainer;
+		_dequeContainer = obj._dequeContainer;
 		_comparisons = obj._comparisons;
 	}
 	return (*this);
@@ -28,7 +28,7 @@ const std::vector<int>& PmergeMe::getUnsorted(void) const {return (_unsortedCont
 
 const std::vector<int>& PmergeMe::getSortedVec(void) const {return (_vecContainer);}
 
-const std::list<int>& PmergeMe::getSortedList(void) const {return (_listContainer);}
+const std::deque<int>& PmergeMe::getSortedDeque(void) const {return (_dequeContainer);}
 
 size_t PmergeMe::getComparisons(void) const {return _comparisons;}
 
@@ -176,110 +176,98 @@ PmergeMe::Vector PmergeMe::assignVecIndexValues(const Vector &sortedVecIndexes) 
 }
 
 
-
-//*	|| ------ std::list------ ||
-// Main listVec
-PmergeMe::List PmergeMe::sortList(void)
+//*	|| ------ std::deque ------ ||
+// Main sortDeque
+PmergeMe::Deque PmergeMe::sortDeque(void)
 {
 	_comparisons = 0;
 	if (_unsortedContainer.size() == 1)
 	{
-		_listContainer.push_back(_unsortedContainer.front());
-		return (_listContainer);
+		_dequeContainer.push_back(_unsortedContainer.front());
+		return (_dequeContainer);
 	}
 
-	List listIndexes = initializeListIndexes();
-	mergeInsertionSortList(listIndexes);
+	Deque DequeIndexes = initializeDequeIndexes();
+	mergeInsertionSortDeque(DequeIndexes);
 
-	_listContainer = assignListIndexValues(listIndexes);
-	return (_listContainer);
+	_dequeContainer = assignDequeIndexValues(DequeIndexes);
+	return (_dequeContainer);
 }
 
 // Recursive core — merge-insert (Ford-Johnson)
-void PmergeMe::mergeInsertionSortList(List &listIndexes)
+void PmergeMe::mergeInsertionSortDeque(Deque &DequeIndexes)
 {
-	if (listIndexes.size() <= 1)
+	if (DequeIndexes.size() <= 1)
 		return ;
 
 	int  straggler = -1;
 	bool isOdd= false;
 
 	// Merge section
-	List winners;
-	Vector winnerPartner(_unsortedContainer.size(), -1);
-	pairList(listIndexes, winners, winnerPartner, straggler, isOdd);
+	Deque winners;
+	Deque winnerPartner(_unsortedContainer.size(), -1);
+	pairDeque(DequeIndexes, winners, winnerPartner, straggler, isOdd);
 	// ----
 
-	mergeInsertionSortList(winners);
+	mergeInsertionSortDeque(winners);
 
 	// Insertion section
-	List mainChain;
-	insertListChain(winners, winnerPartner, mainChain, isOdd, straggler);
+	Deque mainChain;
+	insertDequeChain(winners, winnerPartner, mainChain, isOdd, straggler);
 	// ----
 
-	listIndexes = mainChain;
+	DequeIndexes = mainChain;
 }
 
 // Phase 1: Pairing
-void PmergeMe::pairList(const List &indexes, List &winners, Vector &partners, int &straggler, bool &isOdd)
+void PmergeMe::pairDeque(const Deque &indexes, Deque &winners, Deque &partners, int &straggler, bool &isOdd)
 {
 	size_t indexesSize = indexes.size();
 	isOdd = indexesSize % 2 != 0;
-	List::const_iterator end = indexes.end();
-	if (isOdd)
-		--end;
+	size_t pairCount = isOdd ? indexesSize - 1 : indexesSize;
 
-	List::const_iterator current = indexes.begin();
-	while (current != end)
+	for (size_t i = 0; i < pairCount; i += 2)
 	{
-		List::const_iterator next = current; 
-		++next;
-
-		int a = *current;
-		int b = *next;
+		int a = indexes[i];
+		int b = indexes[i + 1];
 		if (valueLess(a, b))
 			std::swap(a, b);
 		winners.push_back(a);
 		partners[a] = b;
-		std::advance(current, 2);
 	}
 	if (isOdd)
-		straggler = indexes.back();
+		straggler = indexes[indexesSize - 1];
 }
 
 // Phase 2: Chain construction
-void PmergeMe::insertListChain(const List &winners, const Vector &partner, List &mainChain, bool isOdd, int straggler)
+void PmergeMe::insertDequeChain(const Deque &winners, const Deque &partner, Deque &mainChain, bool isOdd, int straggler)
 {
-	VecPair pending;
+	DequePair pending;
 
-	mainChain.push_back(partner[winners.front()]);
-	mainChain.push_back(winners.front());
+	mainChain.push_back(partner[winners[0]]);
+	mainChain.push_back(winners[0]);
 
-	int bound = 1;
-	List::const_iterator it = winners.begin();
-	++it;
-	while (it != winners.end())
+	for (size_t i = 1; i < winners.size(); ++i)
 	{
-		mainChain.push_back(*it);
-		++bound;
-		pending.push_back(std::make_pair(partner[*it], bound));
-		++it;
+		mainChain.push_back(winners[i]);
+		int bound = static_cast<int>(mainChain.size()) - 1;
+		pending.push_back(std::make_pair(partner[winners[i]], bound));
 	}
 	if (isOdd)
 		pending.push_back(std::make_pair(straggler, static_cast<int>(mainChain.size())));
 
-	insertPendingList(mainChain, pending);
+	insertPendingDeque(mainChain, pending);
 }
 
 // Phase 3: Jacobsthal insertion order
-void PmergeMe::insertPendingList(List &mainChain, VecPair &pending)
+void PmergeMe::insertPendingDeque(Deque &mainChain, DequePair &pending)
 {
 	Vector order = generateInsertionSequence(static_cast<int>(pending.size()));
 
 	for (size_t i = 0; i < order.size(); ++i)
 	{
 		int idx = order[i];
-		int offset = insertElementList(mainChain, pending[idx].second, pending[idx].first);
+		int offset = insertElementDeque(mainChain, pending[idx].second, pending[idx].first);
 
 		for (size_t j = 0; j < pending.size(); ++j)
 			if (pending[j].second >= offset)
@@ -287,53 +275,43 @@ void PmergeMe::insertPendingList(List &mainChain, VecPair &pending)
 	}
 }
 
-int PmergeMe::insertElementList(List &mainChain, int upperBound, int value)
+int PmergeMe::insertElementDeque(Deque &mainChain, int upperBound, int value)
 {
-	List::iterator it_offset = mainChain.begin();
-	int offset = fordLowerBoundList(mainChain, upperBound, value, it_offset);
-	mainChain.insert(it_offset, value);
+	int offset = fordLowerBoundDeque(mainChain, upperBound, value);
+	mainChain.insert(mainChain.begin() + offset, value);
 	return (offset);
 }
 
 // Bounded binary search 
-int PmergeMe::fordLowerBoundList(List &mainChain, int upperBound, int toFit, List::iterator &it_offset)
+int PmergeMe::fordLowerBoundDeque(const Deque &mainChain, int upperBound, int toFit)
 {
 	int lowerBound = 0;
-	int midCursor = 0;
-	List::iterator it_midCursor = mainChain.begin();
 	while (lowerBound < upperBound)
 	{
 		int mid = lowerBound + (upperBound - lowerBound) / 2;
-		std::advance(it_midCursor, mid - midCursor);
-		midCursor = mid;
-		if (valueLess(*it_midCursor, toFit))
-		{
+		if (valueLess(mainChain[mid], toFit))
 			lowerBound = mid + 1;
-			it_offset = it_midCursor;
-			++it_offset;
-		}
 		else
 			upperBound = mid;
 	}
 	return (lowerBound);
 }
 
-PmergeMe::List PmergeMe::initializeListIndexes(void) const
+PmergeMe::Deque PmergeMe::initializeDequeIndexes(void) const
 {
-	List indexes;
-	for (size_t i = 0; i != this->_unsortedContainer.size(); ++i)
-		indexes.push_back(i);
+	Deque indexes(_unsortedContainer.size());
+	for (size_t i = 0; i < indexes.size(); ++i)
+		indexes[i] = static_cast<int>(i);
 	return (indexes);
 }
 
-PmergeMe::List PmergeMe::assignListIndexValues(const List &sortedListIndexes) const
+PmergeMe::Deque PmergeMe::assignDequeIndexValues(const Deque &sortedDequeIndexes) const
 {
-	List sortedList;
-	for (List::const_iterator it = sortedListIndexes.begin(); it != sortedListIndexes.end(); ++it)
-		sortedList.push_back(_unsortedContainer[*it]);
-	return (sortedList);
+	Deque sortedDeque(sortedDequeIndexes.size());
+	for (size_t i = 0; i < sortedDequeIndexes.size(); ++i)
+		sortedDeque[i] = _unsortedContainer[sortedDequeIndexes[i]];
+	return (sortedDeque);
 }
-
 
 
 //*	|| ------ insertion sequence ------ ||
@@ -393,3 +371,165 @@ PmergeMe::Vector PmergeMe::parseInput(char **args)
 	}
 	return (container);
 }
+
+
+
+
+
+//	|| ----- LIST IMPLEMENTATION ----- ||
+
+// // Main listVec
+// PmergeMe::List PmergeMe::sortList(void)
+// {
+// 	_comparisons = 0;
+// 	if (_unsortedContainer.size() == 1)
+// 	{
+// 		_listContainer.push_back(_unsortedContainer.front());
+// 		return (_listContainer);
+// 	}
+
+// 	List listIndexes = initializeListIndexes();
+// 	mergeInsertionSortList(listIndexes);
+
+// 	_listContainer = assignListIndexValues(listIndexes);
+// 	return (_listContainer);
+// }
+
+// // Recursive core — merge-insert (Ford-Johnson)
+// void PmergeMe::mergeInsertionSortList(List &listIndexes)
+// {
+// 	if (listIndexes.size() <= 1)
+// 		return ;
+
+// 	int  straggler = -1;
+// 	bool isOdd= false;
+
+// 	// Merge section
+// 	List winners;
+// 	Vector winnerPartner(_unsortedContainer.size(), -1);
+// 	pairList(listIndexes, winners, winnerPartner, straggler, isOdd);
+// 	// ----
+
+// 	mergeInsertionSortList(winners);
+
+// 	// Insertion section
+// 	List mainChain;
+// 	insertListChain(winners, winnerPartner, mainChain, isOdd, straggler);
+// 	// ----
+
+// 	listIndexes = mainChain;
+// }
+
+// // Phase 1: Pairing
+// void PmergeMe::pairList(const List &indexes, List &winners, Vector &partners, int &straggler, bool &isOdd)
+// {
+// 	size_t indexesSize = indexes.size();
+// 	isOdd = indexesSize % 2 != 0;
+// 	List::const_iterator end = indexes.end();
+// 	if (isOdd)
+// 		--end;
+
+// 	List::const_iterator current = indexes.begin();
+// 	while (current != end)
+// 	{
+// 		List::const_iterator next = current; 
+// 		++next;
+
+// 		int a = *current;
+// 		int b = *next;
+// 		if (valueLess(a, b))
+// 			std::swap(a, b);
+// 		winners.push_back(a);
+// 		partners[a] = b;
+// 		std::advance(current, 2);
+// 	}
+// 	if (isOdd)
+// 		straggler = indexes.back();
+// }
+
+// // Phase 2: Chain construction
+// void PmergeMe::insertListChain(const List &winners, const Vector &partner, List &mainChain, bool isOdd, int straggler)
+// {
+// 	VecPair pending;
+
+// 	mainChain.push_back(partner[winners.front()]);
+// 	mainChain.push_back(winners.front());
+
+// 	int bound = 1;
+// 	List::const_iterator it = winners.begin();
+// 	++it;
+// 	while (it != winners.end())
+// 	{
+// 		mainChain.push_back(*it);
+// 		++bound;
+// 		pending.push_back(std::make_pair(partner[*it], bound));
+// 		++it;
+// 	}
+// 	if (isOdd)
+// 		pending.push_back(std::make_pair(straggler, static_cast<int>(mainChain.size())));
+
+// 	insertPendingList(mainChain, pending);
+// }
+
+// // Phase 3: Jacobsthal insertion order
+// void PmergeMe::insertPendingList(List &mainChain, VecPair &pending)
+// {
+// 	Vector order = generateInsertionSequence(static_cast<int>(pending.size()));
+
+// 	for (size_t i = 0; i < order.size(); ++i)
+// 	{
+// 		int idx = order[i];
+// 		int offset = insertElementList(mainChain, pending[idx].second, pending[idx].first);
+
+// 		for (size_t j = 0; j < pending.size(); ++j)
+// 			if (pending[j].second >= offset)
+// 				pending[j].second++;
+// 	}
+// }
+
+// int PmergeMe::insertElementList(List &mainChain, int upperBound, int value)
+// {
+// 	List::iterator it_offset = mainChain.begin();
+// 	int offset = fordLowerBoundList(mainChain, upperBound, value, it_offset);
+// 	mainChain.insert(it_offset, value);
+// 	return (offset);
+// }
+
+// // Bounded binary search 
+// int PmergeMe::fordLowerBoundList(List &mainChain, int upperBound, int toFit, List::iterator &it_offset)
+// {
+// 	int lowerBound = 0;
+// 	int midCursor = 0;
+// 	List::iterator it_midCursor = mainChain.begin();
+// 	while (lowerBound < upperBound)
+// 	{
+// 		int mid = lowerBound + (upperBound - lowerBound) / 2;
+// 		std::advance(it_midCursor, mid - midCursor);
+// 		midCursor = mid;
+// 		if (valueLess(*it_midCursor, toFit))
+// 		{
+// 			lowerBound = mid + 1;
+// 			it_offset = it_midCursor;
+// 			++it_offset;
+// 		}
+// 		else
+// 			upperBound = mid;
+// 	}
+// 	return (lowerBound);
+// }
+
+// PmergeMe::List PmergeMe::initializeListIndexes(void) const
+// {
+// 	List indexes;
+// 	for (size_t i = 0; i != this->_unsortedContainer.size(); ++i)
+// 		indexes.push_back(i);
+// 	return (indexes);
+// }
+
+// PmergeMe::List PmergeMe::assignListIndexValues(const List &sortedListIndexes) const
+// {
+// 	List sortedList;
+// 	for (List::const_iterator it = sortedListIndexes.begin(); it != sortedListIndexes.end(); ++it)
+// 		sortedList.push_back(_unsortedContainer[*it]);
+// 	return (sortedList);
+// }
