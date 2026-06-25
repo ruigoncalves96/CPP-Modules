@@ -17,13 +17,6 @@ std::ostream &operator<<(std::ostream &os, const std::deque<int> &vec)
 	return (os);
 }
 
-// std::ostream &operator<<(std::ostream &os, const std::list<int> &list)
-// {
-// 	for (std::list<int>::const_iterator it = list.begin(); it != list.end(); ++it)
-// 		os << *it << " ";
-// 	return (os);
-// }
-
 int main(int argc, char *argv[])
 {
 	if (argc < 2)
@@ -63,6 +56,14 @@ int main(int argc, char *argv[])
 }
 
 
+
+
+// std::ostream &operator<<(std::ostream &os, const std::list<int> &list)
+// {
+// 	for (std::list<int>::const_iterator it = list.begin(); it != list.end(); ++it)
+// 		os << *it << " ";
+// 	return (os);
+// }
 
 // std::clock_t startList = std::clock();
 // std::list<int> listSorted = sorter.sortList();
