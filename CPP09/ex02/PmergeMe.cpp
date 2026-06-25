@@ -379,12 +379,12 @@ PmergeMe::Vector PmergeMe::parseInput(char **args)
 		std::string s_number = args[i];
 		if (s_number.empty())
 			throw std::runtime_error("empty argument.");
-		if (s_number.find_first_not_of("0123456789") != std::string::npos)
+		if (s_number.find_first_not_of("0123456789+-") != std::string::npos)
 			throw std::runtime_error("invalid argument format '" + varToString(s_number) + "'");
 
 		int i_number = stringToNumber<int>(s_number);
-		if (i_number == 0)
-			throw std::runtime_error("'0' is an invalid number.");
+		if (i_number <= 0)
+			throw std::runtime_error("negative number.");
 		if (std::find(container.begin(), container.end(), i_number) != container.end())
 			throw std::runtime_error("duplicate argument.");
 		container.push_back(i_number);
