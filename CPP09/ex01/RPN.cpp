@@ -1,5 +1,4 @@
 #include "RPN.hpp"
-#include <stack>
 #include <string>
 #include <exception>
 

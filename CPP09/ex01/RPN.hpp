@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <stack>
 
 typedef enum e_tokenType
 {
