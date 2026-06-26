@@ -45,32 +45,9 @@ int main(int argc, char *argv[])
 		std::cout << "Time to process a range of " << sorter.getSortedDeque().size() << " elements with std::deque<int> : " << timeDeque << " us" << std::endl;
 		std::cout << "Vector Comparisons = " << vecComparisons << "\n";
 		std::cout << "Deque Comparisons = " << dequeComparisons << "\n";
-
-//!		----- REMOVE IS SORTED -----
-		// std::cout << "\nVEC is sorted = " << std::is_sorted(sorter.getSortedVec().begin(), sorter.getSortedVec().end()) << "\n";
-		// std::cout << "DEQUE is sorted = " << std::is_sorted(sorter.getSortedDeque().begin(), sorter.getSortedDeque().end()) << "\n";
 	}
 	catch (const std::exception &e) { std::cerr << "Error: " << e.what() << std::endl; return (1);}
 
 	return (0);
 }
 
-
-
-
-// std::ostream &operator<<(std::ostream &os, const std::list<int> &list)
-// {
-// 	for (std::list<int>::const_iterator it = list.begin(); it != list.end(); ++it)
-// 		os << *it << " ";
-// 	return (os);
-// }
-
-// std::clock_t startList = std::clock();
-// std::list<int> listSorted = sorter.sortList();
-// std::clock_t endList= std::clock();
-// size_t listComparisons = sorter.getComparisons();
-
-// double timeList = static_cast<double>(endList - startList) / CLOCKS_PER_SEC * 1000000.0;
-// std::cout << "Time to process a range of " << sorter.getSortedList().size() << " elements with std::list<int> : " << timeList << " us" << std::endl;
-// std::cout << "List Comparisons = " << listComparisons << "\n";
-// std::cout << "LIST is sorted = " << std::is_sorted(sorter.getSortedList().begin(), sorter.getSortedList().end()) << "\n";

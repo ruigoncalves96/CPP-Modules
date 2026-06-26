@@ -94,24 +94,3 @@ std::string varToString(const T var)
 
 #endif
 
-
-//	|| ----- LIST IMPLEMENTATION ----- ||
-
-// std::list<int> sortList(void);
-// const std::list<int> &getSortedList(void) const;
-
-// std::list<int> _listContainer;
-// typedef std::list<int> List;
-
-
-//	List
-// void mergeInsertionSortList(List &listIndexes);
-// void pairList(const List &indexes, List &winners, Vector &partners, int &straggler, bool &isOdd);
-// void insertListChain(const List &winners, const Vector &partner, List &mainChain, bool isOdd, int straggler);
-
-// void insertPendingList(List &mainChain, VecPair &pending);
-// int insertElementList(List &mainChain, int upperBound, int value);
-// int fordLowerBoundList(List &mainChain, int upperBound, int value, List::iterator &it_offset);
-
-// List initializeListIndexes(void) const;
-// List assignListIndexValues(const List &sortedListIndexes) const;
