@@ -109,7 +109,7 @@ float BitcoinExchange::exchangeBitcoin(const std::string &date, const float valu
 void BitcoinExchange::parseSeparator(const std::string &buffer, const std::string &separator, size_t formatMinLen, size_t pos)
 {
 	if (buffer.length() < formatMinLen || buffer.compare(pos, separator.length(), separator) != 0)
-		throw std::runtime_error("Bad format.");
+		throw std::runtime_error("Bad input => " + buffer);
 }
 
 std::string BitcoinExchange::parseDate(const std::string &date)
