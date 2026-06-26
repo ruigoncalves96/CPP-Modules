@@ -1,6 +1,7 @@
 #include "RPN.hpp"
 #include <string>
 #include <exception>
+#include <limits>
 
 RPN::RPN() {}
 
@@ -12,7 +13,7 @@ RPN::~RPN() {}
 
 int RPN::calculate(const std::string &expression)
 {
-	std::stack<int> valueStack;
+	std::stack<long> valueStack;
 
 	std::stringstream ss(expression);
 	t_token token;
@@ -46,11 +47,11 @@ t_tokenType RPN::parseToken(const char token)
 	throw std::runtime_error("invalid input '" + varToString(token) + "'");
 }
 
-void RPN::calcOperation(std::stack<int> &valueStack, const char op)
+void RPN::calcOperation(std::stack<long> &valueStack, const char op)
 {
-	int value2 = valueStack.top(); 
+	long value2 = valueStack.top(); 
 	valueStack.pop();
-	int value1 = valueStack.top();
+	long value1 = valueStack.top();
 	valueStack.pop();
 
 	if (op == '/' && value2 == 0)
@@ -65,4 +66,8 @@ void RPN::calcOperation(std::stack<int> &valueStack, const char op)
 	
 		default: break;
 	}
+	if (valueStack.top() < std::numeric_limits<int>::min())
+		throw std::runtime_error("result exceed integer min => " + varToString(value1) + " " + op + " " + varToString(value2));
+	if (valueStack.top() > std::numeric_limits<int>::max())
+		throw std::runtime_error("result exceed integer max => " + varToString(value1) + " " + op + " " + varToString(value2));
 }

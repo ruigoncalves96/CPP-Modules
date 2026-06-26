@@ -32,7 +32,7 @@ class RPN
 		~RPN();
 
 		static t_tokenType parseToken(const char token);
-		static void calcOperation(std::stack<int> &valueStack, const char op);
+		static void calcOperation(std::stack<long> &valueStack, const char op);
 };
 
 template <typename T>
